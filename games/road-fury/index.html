@@ -5,39 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Road Fury – Stages</title>
 <style>
-:root{--bg:#10131a;--panel:#1b2030;--text:#eef1f7;--muted:#9aa3b8;--accent:#ff5a36;--btn:rgba(255,255,255,.16);--btn-on:rgba(255,90,54,.7);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10131a;--panel:#1b2030;--text:#eef1f7}}
-:root[data-theme="dark"]{--bg:#10131a;--panel:#1b2030;--text:#eef1f7}
+:root{--bg:#f8fafc;--panel:#ffffff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#ff5a36;--btn:rgba(0,0,0,.06);--btn-on:rgba(255,90,54,.2);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#f8fafc;--panel:#ffffff;--text:#0f172a}}
+:root[data-theme="dark"]{--bg:#f8fafc;--panel:#ffffff;--text:#0f172a}
 html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;overscroll-behavior:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 #game{position:absolute;inset:0;width:100%;height:100%;display:block}
 #ui{position:absolute;inset:0;pointer-events:none;padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
 #ui>*{pointer-events:auto}
-.screen{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:clamp(8px,2vh,16px);background:rgba(10,12,18,.8);text-align:center}
+.screen{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:clamp(8px,2vh,16px);background:rgba(255,255,255,.92);text-align:center}
 .screen.on{display:flex}
 h1{font-size:clamp(26px,6vw,58px);margin:0;letter-spacing:.04em;color:var(--accent)}
 p{margin:0;color:var(--muted);font-size:clamp(13px,1.6vw,18px);max-width:560px;padding:0 16px;line-height:1.5}
 .btn{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:clamp(9px,1.8vh,14px) clamp(22px,4vw,48px);font-size:clamp(15px,2vw,22px);font-weight:700;cursor:pointer}
-.btn.alt{background:var(--panel);border:1px solid var(--muted)}
+.btn.alt{background:var(--panel);border:1px solid var(--muted);color:var(--text)}
 #grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:8px;width:min(92vw,720px);max-height:58vh;overflow-y:auto;touch-action:pan-y;padding:4px}
 .st{background:var(--panel);color:var(--text);border:1px solid var(--muted);border-radius:8px;padding:12px 0;font-weight:700;cursor:pointer}
-.st:disabled{opacity:.3;cursor:default}
+.st:disabled{opacity:.5;cursor:default}
 #hud{position:absolute;top:8px;left:8px;right:8px;display:none;flex-direction:column;gap:6px;pointer-events:none!important}
 #hud.on{display:flex}
 #hud .row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 #hud button{pointer-events:auto}
-.chip{background:var(--panel);border-radius:10px;padding:6px 12px;font:600 clamp(11px,1.4vw,24px) ui-monospace,Menlo,Consolas,monospace;white-space:pre;line-height:1.4}
+.chip{background:var(--panel);border-radius:10px;padding:6px 12px;font:600 clamp(11px,1.4vw,24px) ui-monospace,Menlo,Consolas,monospace;white-space:pre;line-height:1.4;color:var(--text);border:1px solid var(--line)}
 #bar{position:relative;height:10px;background:var(--panel);border-radius:6px;margin:0 6px}
 #bar i{position:absolute;top:-3px;width:6px;height:16px;border-radius:3px;background:#888;margin-left:-3px}
 #bar i.me{background:var(--accent);width:8px}
-#count{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:clamp(60px,18vw,160px);font-weight:900;color:#fff;text-shadow:0 4px 20px #000;pointer-events:none!important}
+#count{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:clamp(60px,18vw,160px);font-weight:900;color:var(--accent);text-shadow:0 4px 20px rgba(255,90,54,.3);pointer-events:none!important}
 #count.on{display:flex}
-#hpbar{height:12px;background:var(--panel);border-radius:6px;margin:0 6px;overflow:hidden}
+#hpbar{height:12px;background:var(--panel);border-radius:6px;margin:0 6px;overflow:hidden;border:1px solid var(--muted)}
 #hpfill{height:100%;width:100%;background:#3ddc84;transition:width .15s}
 #toast{position:absolute;top:70px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:8px 18px;border-radius:10px;font-weight:700;font-size:clamp(13px,2vw,20px);display:none;pointer-events:none!important;white-space:nowrap}
 #toast.on{display:block}
-#rot{display:none;position:absolute;top:100px;left:50%;transform:translateX(-50%);background:var(--panel);color:var(--text);padding:6px 12px;border-radius:10px;font-size:12px;text-align:center;pointer-events:none!important}
+#rot{display:none;position:absolute;top:100px;left:50%;transform:translateX(-50%);background:var(--panel);color:var(--text);padding:6px 12px;border-radius:10px;font-size:12px;text-align:center;border:1px solid var(--muted);pointer-events:none!important}
 @media (pointer:coarse) and (orientation:portrait){#rot{display:block}}
-#store{justify-content:space-between;padding:10px 0;background:linear-gradient(rgba(10,12,18,.55),rgba(10,12,18,0) 35%,rgba(10,12,18,.9) 70%)}
+#store{justify-content:space-between;padding:10px 0;background:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0) 35%,rgba(255,255,255,.9) 70%)}
 #cars{display:flex;gap:10px;overflow-x:auto;padding:10px 12px;touch-action:pan-x;width:100%;box-sizing:border-box}
 .card{flex:0 0 clamp(150px,22vw,210px);background:var(--panel);border:2px solid transparent;border-radius:12px;padding:10px;text-align:left;cursor:pointer;color:var(--text)}
 .card.sel{border-color:var(--accent)}
