@@ -1,0 +1,18 @@
+{
+  "name": "gamealltime",
+  "version": "1.0.0",
+  "description": "Gamealltime — Instant-play arcade portal. Road Fury and more.",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abhijangidai/game.git"
+  },
+  "homepage": "https://abhijangidai.github.io/game/",
+  "scripts": {
+    "dev": "npx http-server -p 8000",
+    "start": "npx http-server -p 8000"
+  },
+  "keywords": ["games", "arcade", "html5", "road-fury"],
+  "author": "abhijangidai",
+  "license": "MIT"
+}
