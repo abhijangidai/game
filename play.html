@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Play — Gamealltime</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="bg"></div>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark"><img src="assets/img/logo.svg" alt="Gamealltime logo"></div>
+      <div><div class="logo-text">Game<span>alltime</span></div><div class="logo-sub">PLAY ANYTIME</div></div>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="index.html#games">All Games</a>
+    </nav>
+    <div class="actions">
+      <a class="btn btn-ghost" href="index.html">← Back to Games</a>
+      <button class="btn btn-primary" id="fsBtn" onclick="toggleFS()">⛶ Fullscreen</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="play-layout">
+    <div class="game-frame-wrap" id="wrap">
+      <div class="frame-bar">
+        <div>
+          <h1 id="gameTitle">Loading…</h1>
+          <div style="font-size:12px;color:var(--muted)" id="gameSub"></div>
+        </div>
+        <div class="frame-actions">
+          <button class="btn btn-ghost" onclick="reloadGame()">↻ Restart</button>
+          <button class="btn btn-ghost" onclick="toggleFS()">⛶ Fullscreen</button>
+          <a class="btn btn-primary" href="index.html">All Games</a>
+        </div>
+      </div>
+      <iframe id="gameFrame" class="game-frame" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
+      <div style="padding:10px 14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);background:rgba(255,255,255,.02);font-size:12px;color:var(--muted)">
+        <span>💡 Tip: Press <b>Esc</b> to pause • <b>⛶</b> for best experience • Progress auto-saves</span>
+        <span style="margin-left:auto" id="gameMeta"></span>
+      </div>
+    </div>
+
+    <aside class="side-panel" id="side">
+      <!-- injected -->
+    </aside>
+  </div>
+
+  <!-- More Games removed — only Road Fury for now. Re-add when you have more games. -->
+</main>
+
+<footer class="footer" style="margin-top:22px">
+  <div class="copy">© <span id="year"></span> Gamealltime — Fantastic games, anytime. Add yours in <b>assets/js/games.js</b></div>
+</footer>
+
+<script src="assets/js/games.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const id = params.get("id") || "road-fury";
+const game = GAMES.find(g=>g.id===id) || GAMES[0];
+document.title = game.title + " — Play Free on Gamealltime";
+document.getElementById("gameTitle").textContent = game.title;
+document.getElementById("gameSub").textContent = game.category + " • ★ " + game.rating + " • " + game.plays + " plays";
+document.getElementById("gameMeta").textContent = (game.tags||[]).join(" • ");
+document.getElementById("year").textContent = new Date().getFullYear();
+
+const frame = document.getElementById("gameFrame");
+frame.src = game.url;
+
+document.getElementById("side").innerHTML = `
+  <h3>${game.title}</h3>
+  <p>${game.description}</p>
+  <div>${(game.tags||[]).map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+  <div class="howto">
+    <h4>How to Play</h4>
+    <ul>
+      <li>${game.controls || "Use on-screen controls or keyboard"}</li>
+      <li>On mobile, rotate to landscape for best view</li>
+      <li>Progress saves automatically in your browser</li>
+    </ul>
+  </div>
+`;
+
+function reloadGame(){ frame.src = frame.src; }
+function toggleFS(){
+  const w = document.getElementById("wrap");
+  if(!document.fullscreenElement) w.requestFullscreen().catch(()=> frame.requestFullscreen().catch(()=>{}));
+  else document.exitFullscreen();
+}
+
+</script>
+</body>
+</html>

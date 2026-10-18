@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gamealltime — Play Road Fury Free</title>
+<meta name="description" content="Gamealltime — Play Road Fury free. 100 stages, 8 cars, instant play. More games coming soon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="bg"></div>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark"><img src="assets/img/logo.svg" alt="Gamealltime logo"></div>
+      <div>
+        <div class="logo-text">Game<span>alltime</span></div>
+        <div class="logo-sub">PLAY ANYTIME</div>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="#games">Games</a>
+    </nav>
+    <label class="search-wrap" aria-label="Search games">
+      <span class="ico">🔍</span>
+      <input id="search" type="search" placeholder="Search games...">
+    </label>
+    <div class="actions">
+      <a class="btn btn-primary" href="#games">▶ Play Now</a>
+      <button class="icon-btn hamburger" onclick="toggleMobile()">☰</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-card" id="heroCard"></div>
+  </section>
+
+  <!-- GAMES -->
+  <div class="section-head" id="games">
+    <div>
+      <h2>Featured Game</h2>
+      <p>Tap to play instantly — no download needed</p>
+    </div>
+  </div>
+  <div class="grid single" id="grid"></div>
+
+  <p style="text-align:center; color:var(--muted); font-size:13px; margin:20px 0 0">More games coming soon — stay tuned!</p>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="logo" style="margin-bottom:8px"><div class="logo-mark logo-mark--footer"><img src="assets/img/logo.svg" alt="Gamealltime logo"></div><div><div class="logo-text" style="font-size:18px">Game<span>alltime</span></div><div class="logo-sub">PLAY ANYTIME</div></div></div>
+      <p>Gamealltime — simple, fast, fun. Road Fury is our first game. More fantastic games are on the way.</p>
+      <p style="margin-top:10px">© <span id="year"></span> Gamealltime. Made for players.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <div class="footer-links">
+        <a href="#games">Games</a>
+        <a href="play.html?id=road-fury">Play Road Fury</a>
+      </div>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <div class="footer-links">
+        <a href="mailto:hello@gamealltime.fun">hello@gamealltime.fun</a>
+        <p>Want your game featured? Send your game folder and we will add it.</p>
+      </div>
+    </div>
+  </div>
+  <div class="copy">Gamealltime • Add new games via <b>assets/js/games.js</b> — just push one object.</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/games.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
