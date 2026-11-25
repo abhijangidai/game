@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#050914"/>
+      <stop offset="0.5" stop-color="#101d38"/>
+      <stop offset="1" stop-color="#3b0a18"/>
+    </linearGradient>
+    <radialGradient id="redGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ef4444" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#ef4444" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b5273"/>
+      <stop offset="1" stop-color="#172340"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <g opacity="0.5" stroke="#1e3a5f" stroke-width="1">
+    <path d="M-40 210 L320 70 L680 210 M-40 260 L320 120 L680 260 M-40 310 L320 170 L680 310"/>
+    <path d="M70 360 L400 60 M190 360 L480 60 M310 360 L560 60 M430 360 L640 75"/>
+  </g>
+  <circle cx="325" cy="180" r="175" fill="url(#redGlow)" opacity="0.55"/>
+  <g>
+    <path d="M150 176 l52 -18 l52 18 l-52 18 z" fill="url(#wall)"/>
+    <path d="M150 176 v34 l52 18 v-34 z" fill="#111a30"/>
+    <path d="M254 176 v34 l52 -18 v-34 z" fill="#223252"/>
+    <path d="M150 176 l52 -18 l52 18 l-52 18 z" fill="none" stroke="#22d3ee" stroke-opacity="0.55"/>
+    <path d="M438 236 l52 -18 l52 18 l-52 18 z" fill="url(#wall)"/>
+    <path d="M438 236 v34 l52 18 v-34 z" fill="#111a30"/>
+  </g>
+  <path d="M330 120 L470 178 L330 236 Z" fill="#fbbf24" opacity="0.2"/>
+  <g transform="translate(322 186)">
+    <ellipse cx="0" cy="30" rx="40" ry="17" fill="#000" opacity="0.5"/>
+    <path d="M-26 26 L-20 -6 L20 -6 L26 26 Z" fill="#ef4444"/>
+    <circle cx="0" cy="-18" r="20" fill="#ef4444"/>
+    <path d="M-20 -24 Q0 -38 20 -24 L18 -18 Q0 -30 -18 -18 Z" fill="#7f1d1d"/>
+    <rect x="-12" y="-21" width="9" height="5" rx="2" fill="#fff"/>
+    <rect x="3" y="-21" width="9" height="5" rx="2" fill="#fff"/>
+    <path d="M18 -30 L66 -48 L70 -40 L22 -22 Z" fill="#dc2626"/>
+    <path d="M18 4 L52 16 L50 24 L16 12 Z" fill="#22d3ee" opacity="0.9"/>
+  </g>
+  <g transform="translate(500 92)">
+    <rect x="-42" y="-14" width="84" height="28" rx="7" fill="#7f1d1d" stroke="#ef4444"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="900" letter-spacing="3" fill="#fff">ELITE</text>
+  </g>
+  <text x="320" y="334" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="30" font-weight="900" letter-spacing="5" fill="#f8fafc">SHADOW HUNTER</text>
+</svg>

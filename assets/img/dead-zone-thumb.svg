@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 160" width="340" height="160" role="img">
+  <defs>
+    <linearGradient id="dzBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#030806"/>
+      <stop offset="48%" stop-color="#0b2017"/>
+      <stop offset="100%" stop-color="#2a0a0a"/>
+    </linearGradient>
+    <radialGradient id="dzGlow" cx="50%" cy="52%" r="52%">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity=".55"/>
+      <stop offset="65%" stop-color="#ef4444" stop-opacity=".12"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dzFog" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#22c55e" stop-opacity=".18"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="dzBlur"><feGaussianBlur stdDeviation="2.4"/></filter>
+  </defs>
+  <rect width="340" height="160" fill="url(#dzBg)"/>
+  <circle cx="170" cy="84" r="110" fill="url(#dzGlow)"/>
+  <g fill="#0a1712" stroke="#1c3b2c" stroke-width="1">
+    <path d="M0 96 L0 58 L22 58 L22 44 L40 44 L40 72 L58 72 L58 50 L82 50 L82 84 L104 84 L104 62 L124 62 L124 90 L0 90 Z"/>
+    <path d="M222 92 L222 54 L244 54 L244 68 L262 68 L262 42 L286 42 L286 72 L308 72 L308 52 L340 52 L340 92 Z"/>
+  </g>
+  <g fill="#fbbf24" opacity=".55">
+    <rect x="27" y="60" width="4" height="5"/><rect x="48" y="74" width="4" height="5"/>
+    <rect x="95" y="70" width="4" height="5"/><rect x="252" y="60" width="4" height="5"/>
+    <rect x="296" y="78" width="4" height="5"/>
+  </g>
+  <rect x="0" y="88" width="340" height="14" fill="url(#dzFog)"/>
+  <ellipse cx="170" cy="128" rx="150" ry="20" fill="#000" opacity=".55"/>
+  <g fill="#07110c">
+    <g transform="translate(112 118)">
+      <ellipse cx="0" cy="7" rx="19" ry="5" fill="#000" opacity=".6"/>
+      <path d="M-11 5 L-9 -16 L-4 -20 L-2 -8 L4 -8 L7 -20 L12 -15 L11 5 Z"/>
+      <circle cx="0" cy="-27" r="8"/>
+      <path d="M-7 -27 L-14 -29 L-15 -25 L-8 -24 Z"/>
+      <path d="M-9 -12 L-21 -2 L-18 2 L-7 -6 Z"/>
+      <path d="M8 -12 L20 -4 L17 1 L7 -6 Z"/>
+      <rect x="-4" y="-30" width="3.5" height="2" fill="#ef4444" opacity=".95"/>
+      <rect x="2" y="-30" width="3.5" height="2" fill="#ef4444" opacity=".95"/>
+    </g>
+    <g transform="translate(170 112)">
+      <ellipse cx="0" cy="9" rx="24" ry="6" fill="#000" opacity=".6"/>
+      <path d="M-14 7 L-11 -22 L-5 -27 L-2 -10 L5 -10 L9 -27 L15 -21 L13 7 Z"/>
+      <circle cx="0" cy="-36" r="10"/>
+      <path d="M-9 -35 L-17 -37 L-18 -32 L-10 -31 Z"/>
+      <path d="M-12 -16 L-27 -3 L-23 2 L-10 -9 Z"/>
+      <path d="M11 -16 L26 -5 L22 1 L10 -9 Z"/>
+      <rect x="-5" y="-39" width="4" height="2.4" fill="#ef4444"/>
+      <rect x="3" y="-39" width="4" height="2.4" fill="#ef4444"/>
+    </g>
+    <g transform="translate(232 120)">
+      <ellipse cx="0" cy="6" rx="17" ry="4.5" fill="#000" opacity=".6"/>
+      <path d="M-10 4 L-8 -14 L-4 -18 L-2 -7 L4 -7 L6 -18 L11 -14 L10 4 Z"/>
+      <circle cx="0" cy="-24" r="7"/>
+      <path d="M-8 -10 L-18 -2 L-15 2 L-6 -5 Z"/>
+      <path d="M7 -10 L17 -3 L14 1 L5 -5 Z"/>
+    </g>
+  </g>
+  <g stroke="#ef4444" stroke-width="1.6" opacity=".9" fill="none">
+    <circle cx="170" cy="82" r="16"/>
+    <line x1="170" y1="60" x2="170" y2="68"/><line x1="170" y1="96" x2="170" y2="104"/>
+    <line x1="148" y1="82" x2="156" y2="82"/><line x1="184" y1="82" x2="192" y2="82"/>
+  </g>
+  <g font-family="Inter, system-ui, sans-serif" text-anchor="middle">
+    <text x="170" y="137" font-size="21" font-weight="900" fill="#f0fdf4" letter-spacing="3.4" style="font-style:italic">DEAD ZONE 3D</text>
+    <text x="170" y="150" font-size="8" font-weight="800" fill="#fca5a5" letter-spacing="3">24 ZONES • BOSS WAVES</text>
+  </g>
+</svg>

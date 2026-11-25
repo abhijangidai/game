@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<title>Block Drop 3D — Play Free on Gamealltime</title>
+<meta name="description" content="Block Drop 3D — drag and drop 3D blocks, clear full rows and columns, chain combos and trigger Prism Fever. Free, instant play, auto-saves.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1020;
+  --panel:rgba(20,28,51,.72);
+  --panel-solid:#141c33;
+  --line:rgba(148,184,255,.16);
+  --text:#eef2ff;
+  --muted:#8b9cc9;
+  --accent:#a78bfa;
+  --accent-2:#38d6ff;
+  --good:#35e0a1;
+  --bad:#ff6b6b;
+  box-sizing:border-box;
+}
+*{box-sizing:border-box}
+html,body{
+  height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  touch-action:none;user-select:none;-webkit-user-select:none;overscroll-behavior:none;
+  -webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;
+}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none}
+
+/* ---------- HUD ---------- */
+#hud{
+  position:absolute;top:0;left:0;right:0;display:flex;align-items:flex-start;justify-content:space-between;
+  gap:8px;padding:max(10px,env(safe-area-inset-top)) 12px 0;pointer-events:none;z-index:5;
+}
+.chip{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:6px 14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 4px 24px rgba(0,0,0,.35);min-width:86px;text-align:center;
+}
+.chip .k{font-size:10px;letter-spacing:.14em;font-weight:800;color:var(--muted)}
+.chip .v{font:800 clamp(17px,2.6vw,24px)/1.15 ui-monospace,Menlo,Consolas,monospace;color:#fff;font-variant-numeric:tabular-nums}
+.chip .v.gold{color:#ffd166;text-shadow:0 0 18px rgba(255,209,102,.45)}
+#hudRight{display:flex;gap:8px;align-items:center;pointer-events:auto}
+.icon-btn{
+  width:44px;height:44px;border-radius:13px;border:1px solid var(--line);
+  background:var(--panel);color:var(--text);font-size:19px;cursor:pointer;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:grid;place-items:center;transition:transform .12s,border-color .12s;
+}
+.icon-btn:hover{transform:translateY(-2px);border-color:rgba(167,139,250,.5)}
+.icon-btn:active{transform:scale(.94)}
+
+/* Fever badge */
+#fever{
+  position:absolute;top:max(10px,env(safe-area-inset-top));left:50%;transform:translate(-50%,-8px);
+  z-index:5;display:none;align-items:center;gap:8px;
+  background:linear-gradient(135deg,#7c3aed,#38d6ff);border-radius:999px;
+  padding:7px 18px;font-weight:900;letter-spacing:.12em;font-size:clamp(11px,1.6vw,14px);
+  color:#fff;box-shadow:0 0 28px rgba(124,58,237,.65),inset 0 0 12px rgba(255,255,255,.35);
+  animation:feverPulse 1s ease-in-out infinite;pointer-events:none;white-space:nowrap;
+}
+#fever.on{display:flex}
+@keyframes feverPulse{0%,100%{box-shadow:0 0 22px rgba(124,58,237,.55),inset 0 0 10px rgba(255,255,255,.3)}50%{box-shadow:0 0 40px rgba(56,214,255,.75),inset 0 0 16px rgba(255,255,255,.5)}}
+
+/* Combo pill */
+#combo{
+  position:absolute;top:max(64px,calc(env(safe-area-inset-top) + 54px));left:50%;transform:translateX(-50%) scale(.6);
+  z-index:5;display:none;background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.45);
+  color:#ffd166;font-weight:900;letter-spacing:.1em;border-radius:999px;padding:5px 16px;
+  font-size:clamp(12px,1.8vw,15px);opacity:0;transition:all .18s;pointer-events:none;white-space:nowrap;
+}
+#combo.on{display:block;opacity:1;transform:translateX(-50%) scale(1)}
+
+/* Floating score popups */
+#pop{position:absolute;inset:0;pointer-events:none;z-index:6;overflow:hidden}
+.pop{
+  position:absolute;left:50%;top:34%;transform:translate(-50%,0);
+  font:900 clamp(22px,4.4vw,40px)/1 Inter;color:#fff;white-space:nowrap;
+  text-shadow:0 2px 0 rgba(0,0,0,.35),0 0 32px rgba(167,139,250,.8);
+  animation:popRise 1.35s ease-out forwards;
+}
+.pop.big{font-size:clamp(30px,6vw,56px);color:#ffd166;text-shadow:0 2px 0 rgba(0,0,0,.4),0 0 44px rgba(255,209,102,.85)}
+.pop.fever{background:linear-gradient(135deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none;filter:drop-shadow(0 0 22px rgba(167,139,250,.9))}
+@keyframes popRise{
+  0%{opacity:0;transform:translate(-50%,26px) scale(.6)}
+  14%{opacity:1;transform:translate(-50%,0) scale(1.18)}
+  30%{transform:translate(-50%,-6px) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-140px) scale(.92)}
+}
+
+/* ---------- Tray ---------- */
+#tray{
+  position:absolute;left:0;right:0;bottom:0;z-index:5;
+  display:flex;justify-content:center;gap:clamp(10px,4vw,28px);
+  padding:10px 12px calc(max(10px,env(safe-area-inset-bottom)) + 4px);
+  background:linear-gradient(180deg,transparent,rgba(4,8,20,.55) 38%,rgba(4,8,20,.85));
+}
+.slot{
+  position:relative;width:clamp(88px,24vw,132px);height:clamp(88px,24vw,132px);
+  border-radius:20px;border:1px solid var(--line);cursor:grab;
+  background:radial-gradient(120% 120% at 50% 0%,rgba(56,72,120,.55),rgba(14,20,40,.85));
+  box-shadow:0 10px 30px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);
+  display:grid;place-items:center;transition:transform .15s,border-color .15s,box-shadow .15s;
+  -webkit-user-drag:none;touch-action:none;
+}
+.slot:hover{transform:translateY(-4px);border-color:rgba(167,139,250,.55);box-shadow:0 16px 40px rgba(0,0,0,.5),0 0 26px rgba(124,58,237,.35),inset 0 1px 0 rgba(255,255,255,.08)}
+.slot:active{cursor:grabbing}
+.slot.empty{opacity:.35;cursor:default;transform:none}
+.slot.drag-src{opacity:.18;transform:scale(.92)}
+.slot.deal{animation:dealIn .38s cubic-bezier(.2,1.6,.4,1)}
+@keyframes dealIn{0%{transform:scale(.2) translateY(40px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}
+.slot canvas{width:100%;height:100%;display:block;pointer-events:none}
+
+/* Floating drag piece */
+#dragFloat{
+  position:fixed;left:0;top:0;z-index:20;pointer-events:none;
+  filter:drop-shadow(0 18px 22px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(124,58,237,.35));
+  will-change:transform;
+}
+
+/* ---------- Screens ---------- */
+.screen{
+  position:absolute;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(10px,2vh,18px);text-align:center;padding:20px;
+  background:radial-gradient(120% 90% at 50% 0%,rgba(23,32,66,.88),rgba(4,7,18,.92));
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.screen.on{display:flex}
+.title{
+  font-size:clamp(38px,9vw,84px);font-weight:900;line-height:.98;letter-spacing:-.02em;margin:0;
+  background:linear-gradient(160deg,#fff 15%,#c4b5fd 38%,#38d6ff 78%,#35e0a1 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 6px 30px rgba(124,58,237,.45));
+}
+.title small{display:block;font-size:.28em;letter-spacing:.42em;color:var(--muted);-webkit-text-fill-color:var(--muted);font-weight:800;margin-bottom:10px}
+.sub{color:var(--muted);max-width:520px;margin:0;font-size:clamp(13px,1.6vw,16px);line-height:1.55}
+.best-chip{
+  display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,209,102,.4);
+  background:rgba(255,209,102,.08);color:#ffd166;border-radius:999px;padding:8px 20px;
+  font-weight:800;letter-spacing:.08em;font-size:clamp(12px,1.6vw,15px);
+}
+.btn{
+  border:0;border-radius:16px;cursor:pointer;font-family:inherit;font-weight:900;letter-spacing:.1em;
+  color:#0b1020;background:linear-gradient(135deg,#a78bfa,#38d6ff);
+  padding:clamp(12px,1.8vh,17px) clamp(34px,6vw,64px);font-size:clamp(16px,2.2vw,21px);
+  box-shadow:0 12px 40px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.7);
+  transition:transform .14s,box-shadow .14s,filter .14s;
+}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 18px 54px rgba(56,214,255,.45),inset 0 1px 0 rgba(255,255,255,.7)}
+.btn:active{transform:scale(.96)}
+.btn.alt{
+  background:rgba(148,184,255,.1);color:var(--text);border:1px solid var(--line);
+  box-shadow:none;font-weight:700;
+}
+.btn.alt:hover{border-color:rgba(167,139,250,.55);filter:none;box-shadow:0 0 22px rgba(124,58,237,.25)}
+.howto{display:flex;gap:clamp(10px,2vw,18px);flex-wrap:wrap;justify-content:center;max-width:760px}
+.how{
+  flex:1 1 150px;max-width:220px;background:var(--panel);border:1px solid var(--line);border-radius:18px;
+  padding:14px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.how .ic{font-size:26px}
+.how b{font-size:12px;letter-spacing:.12em;color:#fff}
+.how span{font-size:11.5px;color:var(--muted);line-height:1.45}
+
+.stats{display:flex;gap:clamp(10px,2vw,16px);flex-wrap:wrap;justify-content:center}
+.stat{
+  min-width:104px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 16px;
+}
+.stat .k{font-size:10px;letter-spacing:.14em;color:var(--muted);font-weight:800}
+.stat .v{font:800 clamp(19px,3.4vw,30px)/1.2 ui-monospace,Menlo,Consolas,monospace;color:#fff}
+.newbest{
+  display:none;align-items:center;gap:8px;color:#0b1020;font-weight:900;letter-spacing:.14em;
+  background:linear-gradient(135deg,#ffd166,#ffb020);border-radius:999px;padding:8px 22px;
+  animation:dealIn .5s cubic-bezier(.2,1.6,.4,1);box-shadow:0 0 34px rgba(255,209,102,.55);
+}
+.newbest.on{display:inline-flex}
+.over-title{
+  font-size:clamp(34px,8vw,72px);font-weight:900;margin:0;letter-spacing:-.02em;
+  background:linear-gradient(160deg,#fda4a4,#ff6b6b 55%,#a78bfa);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;filter:drop-shadow(0 6px 26px rgba(255,107,107,.35));
+}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+
+/* Rotate hint (portrait phones only) */
+#rot{
+  display:none;position:absolute;top:calc(max(10px,env(safe-area-inset-top)) + 56px);left:50%;transform:translateX(-50%);
+  z-index:6;background:var(--panel);border:1px solid var(--line);color:var(--muted);
+  padding:6px 14px;border-radius:999px;font-size:11px;pointer-events:none;white-space:nowrap;backdrop-filter:blur(6px);
+}
+@media (pointer:coarse) and (orientation:portrait){#rot{display:block}}
+@media (max-height:480px){
+  .howto{display:none}
+  .title{font-size:clamp(30px,7vh,44px)}
+  .slot{width:clamp(70px,17vh,96px);height:clamp(70px,17vh,96px)}
+}
+</style>
+</head>
+<body>
+
+<canvas id="gl"></canvas>
+
+<!-- HUD -->
+<div id="hud" aria-hidden="true">
+  <div style="display:flex;gap:8px">
+    <div class="chip"><div class="k">SCORE</div><div class="v" id="hScore">0</div></div>
+    <div class="chip"><div class="k">BEST</div><div class="v gold" id="hBest">0</div></div>
+    <div class="chip"><div class="k">LINES</div><div class="v" id="hLines">0</div></div>
+  </div>
+  <div id="hudRight">
+    <button class="icon-btn" id="muteBtn" aria-label="Toggle sound">🔊</button>
+    <button class="icon-btn" id="pauseBtn" aria-label="Pause game">⏸</button>
+  </div>
+</div>
+
+<div id="fever">⚡ PRISM FEVER ×2 · <span id="feverTime">20</span>s</div>
+<div id="combo">COMBO ×2</div>
+<div id="pop"></div>
+<div id="rot">Rotate to landscape for the biggest board</div>
+
+<!-- Tray -->
+<div id="tray" aria-label="Piece tray"></div>
+
+<!-- MENU -->
+<section class="screen on" id="menu" role="dialog" aria-label="Main menu">
+  <h1 class="title"><small>GAMEALLTIME</small>BLOCK<br>DROP 3D</h1>
+  <p class="sub">Drop neon blocks onto the grid, fill complete rows or columns to clear them, and chain clears into massive combos. Every 10 lines ignites <b style="color:#c4b5fd">Prism Fever ×2</b>.</p>
+  <div class="best-chip">👑 BEST&nbsp;&nbsp;<span id="mBest">0</span></div>
+  <button class="btn" id="playBtn">▶&nbsp; PLAY</button>
+  <div class="howto">
+    <div class="how"><div class="ic">🫳</div><b>DRAG &amp; DROP</b><span>Pull any block piece from the tray onto the 8×8 board.</span></div>
+    <div class="how"><div class="ic">💥</div><b>CLEAR LINES</b><span>Fill a full row or column to blast it away and score.</span></div>
+    <div class="how"><div class="ic">⚡</div><b>COMBO &amp; FEVER</b><span>Back-to-back clears multiply points. 10 lines = Prism Fever ×2.</span></div>
+  </div>
+</section>
+
+<!-- PAUSE -->
+<section class="screen" id="pauseScr" role="dialog" aria-label="Paused">
+  <h1 class="title" style="font-size:clamp(34px,7vw,64px)">PAUSED</h1>
+  <div class="btn-row">
+    <button class="btn" id="resumeBtn">▶&nbsp; RESUME</button>
+    <button class="btn alt" id="quitBtn">MAIN MENU</button>
+  </div>
+  <p class="sub" style="font-size:12px">Esc — resume · M — mute</p>
+</section>
+
+<!-- GAME OVER -->
+<section class="screen" id="overScr" role="dialog" aria-label="Game over">
+  <h1 class="over-title">GAME OVER</h1>
+  <div class="newbest" id="newBest">👑 NEW BEST!</div>
+  <div class="stats">
+    <div class="stat"><div class="k">SCORE</div><div class="v" id="oScore">0</div></div>
+    <div class="stat"><div class="k">BEST</div><div class="v" id="oBest">0</div></div>
+    <div class="stat"><div class="k">LINES</div><div class="v" id="oLines">0</div></div>
+    <div class="stat"><div class="k">MAX COMBO</div><div class="v" id="oCombo">0</div></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn" id="retryBtn">↻&nbsp; RETRY</button>
+    <button class="btn alt" id="menuBtn">MAIN MENU</button>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+"use strict";
+/* =====================================================================
+   BLOCK DROP 3D — Gamealltime
+   High-performance 3D line-clear puzzle.
+   Perf notes: one InstancedMesh per color (≤8 draw calls for blocks),
+   pooled particle buffer (one draw call), zero shadow maps, capped
+   pixel ratio, no per-frame allocations in the hot loop.
+   ===================================================================== */
+
+// ---------- Constants ----------
+const N = 8;                 // board is N x N
+const CELL = 2;              // world units per cell
+const BLOCK = 1.7;           // block footprint
+const BLOCK_H = 1.5;         // block height
+const HALF = (N - 1) / 2;    // 3.5
+const PRISM_EVERY = 10;      // lines per Prism Fever
+const FEVER_MS = 20000;      // fever duration
+const LS = { best: "bd3d_best", games: "bd3d_games", lines: "bd3d_lines", mute: "bd3d_mute" };
+
+const PALETTE = [
+  { css: "#ff6b3d", three: 0xff6b3d },
+  { css: "#ffc233", three: 0xffc233 },
+  { css: "#35e0a1", three: 0x35e0a1 },
+  { css: "#33d6ff", three: 0x33d6ff },
+  { css: "#4f8cff", three: 0x4f8cff },
+  { css: "#a78bfa", three: 0xa78bfa },
+  { css: "#ff6bd6", three: 0xff6bd6 },
+  { css: "#a3e635", three: 0xa3e635 },
+];
+
+// ---------- Piece shapes (generated rotations, weighted deck) ----------
+const normCells = cells => {
+  const mx = Math.min(...cells.map(c => c[0])), my = Math.min(...cells.map(c => c[1]));
+  return cells.map(c => [c[0] - mx, c[1] - my]).sort((a, b) => a[1] - b[1] || a[0] - b[0]);
+};
+const rotCells = cells => normCells(cells.map(([x, y]) => [y, -x]));
+const rotationsOf = base => {
+  const out = [], seen = new Set();
+  let cur = normCells(base);
+  for (let i = 0; i < 4; i++) {
+    const k = JSON.stringify(cur);
+    if (!seen.has(k)) { seen.add(k); out.push(cur); }
+    cur = rotCells(cur);
+  }
+  return out;
+};
+const SHAPE_DEFS = [
+  { base: [[0, 0]],                                w: 3   },  // dot
+  { base: [[0, 0], [1, 0]],                        w: 4.2 },  // domino
+  { base: [[0, 0], [1, 0], [2, 0]],                w: 6   },  // line 3
+  { base: [[0, 0], [1, 0], [2, 0], [3, 0]],        w: 5   },  // line 4
+  { base: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]],w: 2   },  // line 5
+  { base: [[0, 0], [1, 0], [0, 1], [1, 1]],        w: 6   },  // 2x2 square
+  { base: [[0, 0], [1, 0], [2, 0], [0, 1], [1, 1], [2, 1], [0, 2], [1, 2], [2, 2]], w: 1.1 }, // 3x3
+  { base: [[0, 0], [0, 1], [1, 1]],                w: 2.6 },  // small L tromino
+  { base: [[0, 0], [0, 1], [0, 2], [1, 2]],        w: 2.1 },  // L tetromino
+  { base: [[0, 0], [1, 0], [0, 1], [0, 2]],        w: 2.1 },  // J
+  { base: [[0, 0], [0, 1], [0, 2], [1, 0], [2, 0]],w: 2.3 },  // big corner (5)
+  { base: [[1, 0], [0, 1], [1, 1], [2, 1]],        w: 2.2 },  // T
+  { base: [[1, 0], [2, 0], [0, 1], [1, 1]],        w: 2.0 },  // S / Z
+  { base: [[1, 0], [0, 1], [1, 1], [2, 1], [1, 2]],w: 1.6 },  // plus
+  { base: [[0, 0], [1, 0], [0, 1], [0, 2], [1, 2]],w: 1.4 },  // U pentomino
+];
+const DECK = (() => {
+  const d = [];
+  for (const def of SHAPE_DEFS) for (const cells of rotationsOf(def.base)) d.push({ cells, w: def.w });
+  return d;
+})();
+const DECK_TOTAL = DECK.reduce((s, e) => s + e.w, 0);
+const randomPiece = () => {
+  let r = Math.random() * DECK_TOTAL;
+  for (const e of DECK) { r -= e.w; if (r <= 0) return { cells: e.cells, color: (Math.random() * PALETTE.length) | 0, id: ++pieceId }; }
+  return { cells: DECK[0].cells, color: 0, id: ++pieceId };
+};
+let pieceId = 0;
+
+// ---------- State ----------
+const board = new Uint8Array(N * N);  // 0 = empty, else palette index + 1
+let mode = "menu";                    // menu | play | pause | over
+let score = 0, combo = 0, maxCombo = 0, linesTotal = 0, piecesPlaced = 0;
+let nextFeverAt = PRISM_EVERY;
+let feverUntil = 0, feverLeft = 0;
+let best = +(localStorage.getItem(LS.best) || 0);
+let clearing = null;                  // { set:Set<idx>, t, dur, lines }
+let tray = [null, null, null];
+let drag = null;                      // active drag session
+const clearScale = new Map();         // cell idx -> scale during clear anim
+
+// ---------- DOM ----------
+const $ = id => document.getElementById(id);
+const glCanvas = $("gl");
+const trayEl = $("tray");
+const hScore = $("hScore"), hBest = $("hBest"), hLines = $("hLines");
+const comboEl = $("combo"), feverEl = $("fever"), feverTimeEl = $("feverTime");
+const slots = [];
+
+// ---------- Audio (synth, no assets) ----------
+const SFX = (() => {
+  let ctx = null, master = null;
+  let muted = localStorage.getItem(LS.mute) === "1";
+  const ensure = () => {
+    if (!ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return false;
+      ctx = new AC();
+      master = ctx.createGain();
+      master.gain.value = muted ? 0 : 0.45;
+      master.connect(ctx.destination);
+    }
+    if (ctx.state === "suspended") ctx.resume();
+    return true;
+  };
+  const tone = (freq, dur, type, vol, delay, slideTo) => {
+    if (!ensure()) return;
+    const t0 = ctx.currentTime + (delay || 0);
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type || "sine";
+    o.frequency.setValueAtTime(freq, t0);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol || 0.3, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(master);
+    o.start(t0); o.stop(t0 + dur + 0.02);
+  };
+  return {
+    isMuted: () => muted,
+    toggleMute() { muted = !muted; localStorage.setItem(LS.mute, muted ? "1" : "0"); if (master) master.gain.value = muted ? 0 : 0.45; return muted; },
+    unlock: ensure,
+    button() { tone(760, 0.06, "triangle", 0.18); },
+    place()  { tone(523, 0.07, "triangle", 0.3); tone(784, 0.1, "sine", 0.22, 0.045); },
+    invalid(){ tone(150, 0.16, "sawtooth", 0.16, 0, 90); },
+    clear(n) {
+      const base = [523, 659, 784, 1047, 1319];
+      const steps = Math.min(base.length, 2 + n);
+      for (let i = 0; i < steps; i++) tone(base[i], 0.14, "triangle", 0.28, i * 0.055);
+      tone(2093, 0.22, "sine", 0.12, steps * 0.055);
+    },
+    fever()  { [523, 659, 784, 1319].forEach((f, i) => tone(f, 0.16, "square", 0.1, i * 0.07)); },
+    over()   { [392, 330, 262, 196].forEach((f, i) => tone(f, 0.24, "triangle", 0.22, i * 0.14)); },
+  };
+})();
+
+// ---------- Three.js scene ----------
+const renderer = new THREE.WebGLRenderer({ canvas: glCanvas, antialias: true, powerPreference: "high-performance" });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.outputEncoding = THREE.sRGBEncoding;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b1020);
+scene.fog = new THREE.Fog(0x0b1020, 55, 110);
+
+const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 200);
+const camBase = new THREE.Vector3(0, 21.5, 16.5);
+const camTarget = new THREE.Vector3(0, 0, 0.4);
+camera.position.copy(camBase);
+camera.lookAt(camTarget);
+
+// Lighting — no shadow maps (perf); hemisphere + 2 directionals for shape
+scene.add(new THREE.HemisphereLight(0xbdd3ff, 0x1a1030, 1.05));
+const key = new THREE.DirectionalLight(0xffffff, 0.95); key.position.set(9, 18, 7); scene.add(key);
+const rim = new THREE.DirectionalLight(0x7fb4ff, 0.55); rim.position.set(-11, 10, -8); scene.add(rim);
+
+// Board slab + glowing grid top (canvas texture, single draw call)
+const slab = new THREE.Mesh(
+  new THREE.BoxGeometry(N * CELL + 1.5, 1.6, N * CELL + 1.5),
+  new THREE.MeshLambertMaterial({ color: 0x141c33 })
+);
+slab.position.y = -0.8;
+scene.add(slab);
+
+const boardTexture = (() => {
+  const S = 1024, c = document.createElement("canvas");
+  c.width = c.height = S;
+  const g = c.getContext("2d");
+  // deep navy base with soft radial lift in the centre
+  const bg = g.createRadialGradient(S / 2, S / 2, S * 0.08, S / 2, S / 2, S * 0.72);
+  bg.addColorStop(0, "#1d2748"); bg.addColorStop(1, "#10162e");
+  g.fillStyle = bg; g.fillRect(0, 0, S, S);
+  const cell = S / N, pad = cell * 0.1, r = cell * 0.16;
+  const round = (x, y, w, h, rad) => {
+    g.beginPath();
+    g.moveTo(x + rad, y);
+    g.arcTo(x + w, y, x + w, y + h, rad);
+    g.arcTo(x + w, y + h, x, y + h, rad);
+    g.arcTo(x, y + h, x, y, rad);
+    g.arcTo(x, y, x + w, y, rad);
+    g.closePath();
+  };
+  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const x = i * cell + pad, y = j * cell + pad, w = cell - pad * 2;
+    // inset slot
+    round(x, y, w, w, r);
+    g.fillStyle = "#0a0f24"; g.fill();
+    // top inner shadow
+    round(x, y, w, w, r);
+    g.strokeStyle = "rgba(140,175,255,.10)"; g.lineWidth = 3; g.stroke();
+    // faint centre glow dot
+    const gg = g.createRadialGradient(x + w / 2, y + w / 2, 1, x + w / 2, y + w / 2, w * 0.6);
+    gg.addColorStop(0, "rgba(96,140,255,.10)"); gg.addColorStop(1, "rgba(96,140,255,0)");
+    round(x, y, w, w, r); g.fillStyle = gg; g.fill();
+  }
+  // glowing frame
+  g.strokeStyle = "rgba(120,170,255,.35)"; g.lineWidth = 10;
+  g.shadowColor = "rgba(110,160,255,.8)"; g.shadowBlur = 34;
+  g.strokeRect(5, 5, S - 10, S - 10);
+  g.shadowBlur = 0;
+  const tex = new THREE.CanvasTexture(c);
+  tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  return tex;
+})();
+const boardTop = new THREE.Mesh(
+  new THREE.PlaneGeometry(N * CELL + 1.5, N * CELL + 1.5),
+  new THREE.MeshBasicMaterial({ map: boardTexture })
+);
+boardTop.rotation.x = -Math.PI / 2;
+boardTop.position.y = 0.002;
+scene.add(boardTop);
+
+// Instanced blocks — one InstancedMesh per palette color
+const blockGeo = new THREE.BoxGeometry(BLOCK, BLOCK_H, BLOCK);
+const blockMats = PALETTE.map(p => new THREE.MeshLambertMaterial({
+  color: p.three,
+  emissive: new THREE.Color(p.three).multiplyScalar(0.24),
+}));
+const blocks = blockMats.map(m => {
+  const im = new THREE.InstancedMesh(blockGeo, m, N * N);
+  im.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  im.count = 0;
+  im.frustumCulled = false;
+  scene.add(im);
+  return im;
+});
+const dummy = new THREE.Object3D();
+const cellCenter = idx => ({ i: idx % N, j: (idx / N) | 0 });
+const cellPos = (i, j) => ({ x: (i - HALF) * CELL, z: (j - HALF) * CELL });
+
+function syncInstances() {
+  const per = PALETTE.map(() => []);
+  for (let idx = 0; idx < N * N; idx++) {
+    const v = board[idx];
+    if (v) per[v - 1].push(idx);
+  }
+  for (let c = 0; c < PALETTE.length; c++) {
+    const mesh = blocks[c];
+    let n = 0;
+    for (const idx of per[c]) {
+      const { i, j } = cellCenter(idx);
+      const p = cellPos(i, j);
+      const s = clearScale.has(idx) ? Math.max(clearScale.get(idx), 0.001) : 1;
+      dummy.position.set(p.x, (BLOCK_H * s) / 2, p.z);
+      dummy.scale.set(s, s, s);
+      dummy.rotation.set(0, 0, 0);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(n++, dummy.matrix);
+    }
+    mesh.count = n;
+    mesh.instanceMatrix.needsUpdate = true;
+  }
+}
+
+// Ghost (placement preview) — pooled transparent blocks
+const ghostMats = {
+  ok:  new THREE.MeshBasicMaterial({ color: 0x35e0a1, transparent: true, opacity: 0.5, depthWrite: false }),
+  bad: new THREE.MeshBasicMaterial({ color: 0xff6b6b, transparent: true, opacity: 0.5, depthWrite: false }),
+};
+const ghostPool = Array.from({ length: 9 }, () => {
+  const m = new THREE.Mesh(blockGeo, ghostMats.ok);
+  m.visible = false;
+  scene.add(m);
+  return m;
+});
+const setGhost = (cells, originI, originJ, valid) => {
+  for (let k = 0; k < ghostPool.length; k++) {
+    const g = ghostPool[k];
+    if (k < cells.length) {
+      const i = originI + cells[k][0], j = originJ + cells[k][1];
+      const p = cellPos(i, j);
+      g.position.set(p.x, BLOCK_H / 2, p.z);
+      g.material = valid ? ghostMats.ok : ghostMats.bad;
+      g.visible = true;
+    } else g.visible = false;
+  }
+};
+const hideGhost = () => ghostPool.forEach(g => (g.visible = false));
+
+// Starfield — pooled points, slow drift, one draw call
+const stars = (() => {
+  const M = 150, pos = new Float32Array(M * 3);
+  for (let i = 0; i < M; i++) {
+    const r = 26 + Math.random() * 42, th = Math.random() * Math.PI * 2, ph = Math.random() * Math.PI * 0.42;
+    pos[i * 3] = r * Math.sin(ph) * Math.cos(th);
+    pos[i * 3 + 1] = r * Math.cos(ph) * 0.55 + 2;
+    pos[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  const mat = new THREE.PointsMaterial({ color: 0x8fb7ff, size: 0.32, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false });
+  const pts = new THREE.Points(geo, mat);
+  scene.add(pts);
+  return pts;
+})();
+
+// Particles — fixed-size pooled buffer, color fades to black (additive) = fade out
+const PMAX = 420;
+const pGeo = new THREE.BufferGeometry();
+const pPos = new Float32Array(PMAX * 3);
+const pCol = new Float32Array(PMAX * 3);
+const pVel = new Float32Array(PMAX * 3);
+const pLife = new Float32Array(PMAX);
+const pMaxLife = new Float32Array(PMAX);
+const pBase = new Float32Array(PMAX * 3);
+for (let i = 0; i < PMAX; i++) pPos[i * 3 + 1] = -999;
+pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
+pGeo.setAttribute("color", new THREE.BufferAttribute(pCol, 3));
+const pMat = new THREE.PointsMaterial({ size: 0.5, vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
+const points = new THREE.Points(pGeo, pMat);
+points.frustumCulled = false;
+scene.add(points);
+let pCursor = 0;
+const spawnBurst = (x, y, z, hex, count, spread, up) => {
+  const c = new THREE.Color(hex);
+  for (let n = 0; n < count; n++) {
+    const i = pCursor; pCursor = (pCursor + 1) % PMAX;
+    pPos[i * 3] = x; pPos[i * 3 + 1] = y; pPos[i * 3 + 2] = z;
+    const a = Math.random() * Math.PI * 2, s = (Math.random() * 0.6 + 0.4) * (spread || 3.4);
+    pVel[i * 3] = Math.cos(a) * s;
+    pVel[i * 3 + 1] = Math.random() * (up || 5.2) + 2.2;
+    pVel[i * 3 + 2] = Math.sin(a) * s;
+    pMaxLife[i] = pLife[i] = 0.55 + Math.random() * 0.45;
+    pBase[i * 3] = c.r; pBase[i * 3 + 1] = c.g; pBase[i * 3 + 2] = c.b;
+  }
+};
+const updateParticles = dt => {
+  for (let i = 0; i < PMAX; i++) {
+    if (pLife[i] <= 0) continue;
+    pLife[i] -= dt;
+    if (pLife[i] <= 0) { pPos[i * 3 + 1] = -999; pCol[i * 3] = pCol[i * 3 + 1] = pCol[i * 3 + 2] = 0; continue; }
+    pVel[i * 3 + 1] -= 11.5 * dt;
+    pVel[i * 3] *= (1 - 1.6 * dt); pVel[i * 3 + 2] *= (1 - 1.6 * dt);
+    pPos[i * 3] += pVel[i * 3] * dt;
+    pPos[i * 3 + 1] += pVel[i * 3 + 1] * dt;
+    pPos[i * 3 + 2] += pVel[i * 3 + 2] * dt;
+    if (pPos[i * 3 + 1] < 0.12) { pPos[i * 3 + 1] = 0.12; pVel[i * 3 + 1] *= -0.42; }
+    const f = pLife[i] / pMaxLife[i];
+    pCol[i * 3] = pBase[i * 3] * f; pCol[i * 3 + 1] = pBase[i * 3 + 1] * f; pCol[i * 3 + 2] = pBase[i * 3 + 2] * f;
+  }
+  pGeo.attributes.position.needsUpdate = true;
+  pGeo.attributes.color.needsUpdate = true;
+};
+
+// ---------- Camera fit / parallax / shake ----------
+function fitCamera() {
+  const w = window.innerWidth, h = window.innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.fov = camera.aspect >= 1.15 ? 38 : camera.aspect >= 0.8 ? 46 : camera.aspect >= 0.6 ? 55 : 63;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener("resize", fitCamera);
+fitCamera();
+
+let parX = 0, parY = 0, shake = 0;
+const parTarget = { x: 0, y: 0 };
+window.addEventListener("pointermove", e => {
+  parTarget.x = (e.clientX / window.innerWidth - 0.5) * 1.7;
+  parTarget.y = (e.clientY / window.innerHeight - 0.5) * 1.1;
+}, { passive: true });
+const addShake = m => { shake = Math.min(shake + m, 1.6); };
+
+// ---------- 2D piece renderer (tray + drag float) ----------
+function roundRectPath(g, x, y, w, h, r) {
+  g.beginPath();
+  g.moveTo(x + r, y);
+  g.arcTo(x + w, y, x + w, y + h, r);
+  g.arcTo(x + w, y + h, x, y + h, r);
+  g.arcTo(x, y + h, x, y, r);
+  g.arcTo(x, y, x + w, y, r);
+  g.closePath();
+}
+function shade(hex, amt) {  // -1..1 darken/lighten
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  const t = amt < 0 ? 0 : 255, p = Math.abs(amt);
+  r = Math.round(r + (t - r) * p); g = Math.round(g + (t - g) * p); b = Math.round(b + (t - b) * p);
+  return `rgb(${r},${g},${b})`;
+}
+function drawBlock2D(g, x, y, s, css, glow) {
+  const r = s * 0.2;
+  const grad = g.createLinearGradient(x, y, x, y + s);
+  grad.addColorStop(0, shade(css, 0.42));
+  grad.addColorStop(0.42, css);
+  grad.addColorStop(1, shade(css, -0.3));
+  if (glow) { g.shadowColor = css; g.shadowBlur = s * 0.42; }
+  roundRectPath(g, x, y, s, s, r);
+  g.fillStyle = grad; g.fill();
+  g.shadowBlur = 0;
+  g.strokeStyle = "rgba(0,0,0,.38)"; g.lineWidth = Math.max(1, s * 0.035); g.stroke();
+  // top bevel highlight
+  roundRectPath(g, x + s * 0.09, y + s * 0.07, s * 0.82, s * 0.42, r * 0.75);
+  g.strokeStyle = "rgba(255,255,255,.5)"; g.lineWidth = Math.max(1, s * 0.03); g.stroke();
+}
+const pieceBBox = piece => {
+  let w = 0, h = 0;
+  for (const [x, y] of piece.cells) { if (x + 1 > w) w = x + 1; if (y + 1 > h) h = y + 1; }
+  return { w, h };
+};
+function renderPiece(canvas, piece, cellPx, glow) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const { w, h } = pieceBBox(piece);
+  const pad = cellPx * 0.16;
+  const cssW = Math.max(w * cellPx + pad * 2, cellPx * 1.4), cssH = Math.max(h * cellPx + pad * 2, cellPx * 1.4);
+  canvas.width = Math.round(cssW * dpr); canvas.height = Math.round(cssH * dpr);
+  canvas.style.width = cssW + "px"; canvas.style.height = cssH + "px";
+  const g = canvas.getContext("2d");
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.clearRect(0, 0, cssW, cssH);
+  const ox = (cssW - w * cellPx) / 2, oy = (cssH - h * cellPx) / 2;
+  const css = PALETTE[piece.color].css;
+  for (const [cx, cy] of piece.cells) drawBlock2D(g, ox + cx * cellPx + 1, oy + cy * cellPx + 1, cellPx - 2, css, glow);
+}
+
+// ---------- Tray UI ----------
+function buildTray() {
+  trayEl.innerHTML = "";
+  slots.length = 0;
+  for (let i = 0; i < 3; i++) {
+    const btn = document.createElement("button");
+    btn.className = "slot";
+    btn.setAttribute("aria-label", "Piece slot " + (i + 1));
+    const cv = document.createElement("canvas");
+    btn.appendChild(cv);
+    trayEl.appendChild(btn);
+    slots.push({ btn, cv });
+    btn.addEventListener("pointerdown", e => startDrag(e, i));
+  }
+}
+function refreshSlots(dealAnim) {
+  for (let i = 0; i < 3; i++) {
+    const { btn, cv } = slots[i];
+    const p = tray[i];
+    if (!p) { btn.classList.add("empty"); btn.classList.remove("drag-src"); const g = cv.getContext("2d"); cv.width = 1; cv.height = 1; continue; }
+    btn.classList.remove("empty");
+    const size = btn.clientWidth || 110;
+    const { w, h } = pieceBBox(p);
+    renderPiece(cv, p, Math.floor((size * 0.78) / Math.max(w, h)), false);
+    if (dealAnim) { btn.classList.remove("deal"); void btn.offsetWidth; btn.classList.add("deal"); }
+  }
+}
+const dealTray = () => { tray = [randomPiece(), randomPiece(), randomPiece()]; refreshSlots(true); };
+
+// ---------- Board logic ----------
+const idxOf = (i, j) => j * N + i;
+const inBoard = (i, j) => i >= 0 && j >= 0 && i < N && j < N;
+const canPlace = (piece, oi, oj) => {
+  for (const [dx, dy] of piece.cells) {
+    const i = oi + dx, j = oj + dy;
+    if (!inBoard(i, j) || board[idxOf(i, j)] !== 0) return false;
+  }
+  return true;
+};
+const findFullLines = () => {
+  const rows = [], cols = [];
+  for (let j = 0; j < N; j++) { let full = true; for (let i = 0; i < N; i++) if (!board[idxOf(i, j)]) { full = false; break; } if (full) rows.push(j); }
+  for (let i = 0; i < N; i++) { let full = true; for (let j = 0; j < N; j++) if (!board[idxOf(i, j)]) { full = false; break; } if (full) cols.push(i); }
+  return { rows, cols };
+};
+const FEVER = () => feverUntil > performance.now();
+
+function placePiece(piece, oi, oj) {
+  for (const [dx, dy] of piece.cells) board[idxOf(oi + dx, oj + dy)] = piece.color + 1;
+  piecesPlaced++;
+  const cellScore = piece.cells.length * 5 * (FEVER() ? 2 : 1);
+  addScore(cellScore);
+  syncInstances();
+
+  const { rows, cols } = findFullLines();
+  const lineCount = rows.length + cols.length;
+  if (lineCount > 0) {
+    const set = new Set();
+    for (const j of rows) for (let i = 0; i < N; i++) set.add(idxOf(i, j));
+    for (const i of cols) for (let j = 0; j < N; j++) set.add(idxOf(i, j));
+    combo++;
+    maxCombo = Math.max(maxCombo, combo);
+    const base = [0, 150, 400, 750, 1200, 1800, 2400];
+    const pts = (base[Math.min(lineCount, 6)] * combo) * (FEVER() ? 2 : 1);
+    addScore(pts);
+    linesTotal += lineCount;
+    clearing = { set, t: 0, dur: 0.34, lines: lineCount };
+    SFX.clear(lineCount);
+    addShake(0.35 + lineCount * 0.22);
+    popup("+" + pts.toLocaleString(), lineCount >= 3 ? "big" : "");
+    if (lineCount >= 3) popup(lineCount + " LINES!", "big");
+    if (combo >= 2) popup("COMBO ×" + combo, "");
+    checkFeverUnlock();
+    updateHUD();
+    return true;
+  }
+  combo = 0;
+  updateHUD();
+  return false;
+}
+function checkFeverUnlock() {
+  if (linesTotal >= nextFeverAt) {
+    nextFeverAt += PRISM_EVERY;
+    feverUntil = performance.now() + FEVER_MS;
+    feverEl.classList.add("on");
+    popup("⚡ PRISM FEVER ×2", "fever");
+    SFX.fever();
+  }
+}
+function addScore(n) { score += n; }
+
+function finalizeClear() {
+  // award bursts per cleared cell using its color
+  for (const idx of clearing.set) {
+    const v = board[idx];
+    const { i, j } = cellCenter(idx);
+    const p = cellPos(i, j);
+    if (v) spawnBurst(p.x, BLOCK_H * 0.7, p.z, PALETTE[v - 1].three, 9, 3.6, 5.6);
+    board[idx] = 0;
+  }
+  clearScale.clear();
+  clearing = null;
+  syncInstances();
+  afterMove();
+}
+function afterMove() {
+  updateHUD();
+  if (tray.every(t => !t)) { dealTray(); if (!anyFit()) gameOver(); return; }  // refill, then check the new tray fits
+  if (!anyFit()) gameOver();
+}
+const anyFit = () => {
+  for (const p of tray) {
+    if (!p) continue;
+    const { cells } = p;
+    let w = 0, h = 0;
+    for (const [x, y] of cells) { if (x + 1 > w) w = x + 1; if (y + 1 > h) h = y + 1; }
+    for (let j = 0; j <= N - h; j++) for (let i = 0; i <= N - w; i++) if (canPlace(p, i, j)) return true;
+  }
+  return false;
+};
+
+function gameOver() {
+  mode = "over";
+  hideGhost();
+  const isBest = score > best;
+  if (isBest) { best = score; localStorage.setItem(LS.best, String(best)); }
+  localStorage.setItem(LS.games, String(+(localStorage.getItem(LS.games) || 0) + 1));
+  localStorage.setItem(LS.lines, String(+(localStorage.getItem(LS.lines) || 0) + linesTotal));
+  $("oScore").textContent = score.toLocaleString();
+  $("oBest").textContent = best.toLocaleString();
+  $("oLines").textContent = linesTotal;
+  $("oCombo").textContent = "×" + maxCombo;
+  $("newBest").classList.toggle("on", isBest);
+  showScreen("overScr");
+  setTrayVisible(false);
+  feverUntil = 0;
+  feverEl.classList.remove("on");
+  SFX.over();
+  updateHUD();
+}
+
+// ---------- HUD / popups / screens ----------
+function updateHUD() {
+  hScore.textContent = score.toLocaleString();
+  hBest.textContent = Math.max(best, score).toLocaleString();
+  hLines.textContent = linesTotal;
+  if (combo >= 2) { comboEl.textContent = "COMBO ×" + combo; comboEl.classList.add("on"); }
+  else comboEl.classList.remove("on");
+}
+function popup(text, cls) {
+  const d = document.createElement("div");
+  d.className = "pop" + (cls ? " " + cls : "");
+  d.textContent = text;
+  d.style.top = (26 + Math.random() * 14) + "%";
+  $("pop").appendChild(d);
+  setTimeout(() => d.remove(), 1450);
+}
+const screens = ["menu", "pauseScr", "overScr"];
+function showScreen(id) {
+  for (const s of screens) $(s).classList.toggle("on", s === id);
+}
+const hideScreens = () => screens.forEach(s => $(s).classList.remove("on"));
+function setTrayVisible(v) { trayEl.style.display = v ? "flex" : "none"; }
+function startGame() {
+  board.fill(0);
+  clearScale.clear();
+  clearing = null;
+  score = 0; combo = 0; maxCombo = 0; linesTotal = 0; piecesPlaced = 0;
+  nextFeverAt = PRISM_EVERY; feverUntil = 0; feverLeft = 0;
+  feverEl.classList.remove("on");
+  hideGhost();
+  syncInstances();
+  dealTray();
+  mode = "play";
+  hideScreens();
+  setTrayVisible(true);
+  updateHUD();
+}
+
+// ---------- Drag & drop (pointer events unify mouse/touch) ----------
+const planeY0 = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+const raycaster = new THREE.Raycaster();
+const ndc = new THREE.Vector2();
+const hitPoint = new THREE.Vector3();
+const isCoarse = () => window.matchMedia("(pointer:coarse)").matches;
+
+function boardCellFromClient(cx, cy, piece) {
+  const lift = isCoarse() ? 96 : 8;           // keep the piece visible above a finger
+  const y = cy - lift;
+  const r = glCanvas.getBoundingClientRect();
+  ndc.x = ((cx - r.left) / r.width) * 2 - 1;
+  ndc.y = -((y - r.top) / r.height) * 2 + 1;
+  raycaster.setFromCamera(ndc, camera);
+  if (!raycaster.ray.intersectPlane(planeY0, hitPoint)) return null;
+  let w = 0, h = 0;
+  for (const [x, yy] of piece.cells) { if (x + 1 > w) w = x + 1; if (yy + 1 > h) h = yy + 1; }
+  const oi = Math.round(hitPoint.x / CELL + N / 2 - 0.5 - (w - 1) / 2);
+  const oj = Math.round(hitPoint.z / CELL + N / 2 - 0.5 - (h - 1) / 2);
+  return { oi, oj };
+}
+
+function startDrag(e, slotIdx) {
+  if (mode !== "play" || clearing) return;
+  const piece = tray[slotIdx];
+  if (!piece) return;
+  e.preventDefault();
+  SFX.unlock();
+  const { btn } = slots[slotIdx];
+  btn.classList.add("drag-src");
+
+  const floatCv = document.createElement("canvas");
+  floatCv.id = "dragFloat";
+  renderPiece(floatCv, piece, 42, true);
+  document.body.appendChild(floatCv);
+
+  drag = { slotIdx, piece, floatCv, active: true };
+  moveFloat(e.clientX, e.clientY);
+  updateGhost(e.clientX, e.clientY);
+  window.addEventListener("pointermove", onDragMove, { passive: false });
+  window.addEventListener("pointerup", onDragEnd, { once: true });
+  window.addEventListener("pointercancel", onDragCancel, { once: true });
+}
+function moveFloat(cx, cy) {
+  if (!drag) return;
+  const lift = isCoarse() ? 96 : 8;
+  const w = drag.floatCv.offsetWidth || 120, h = drag.floatCv.offsetHeight || 120;
+  drag.floatCv.style.transform = `translate(${cx - w / 2}px, ${cy - lift - h / 2}px)`;
+}
+function updateGhost(cx, cy) {
+  const t = boardCellFromClient(cx, cy, drag.piece);
+  if (!t) { hideGhost(); return; }
+  const valid = canPlace(drag.piece, t.oi, t.oj);
+  setGhost(drag.piece.cells, t.oi, t.oj, valid);
+  drag.target = { ...t, valid };
+}
+function onDragMove(e) {
+  if (!drag) return;
+  e.preventDefault();
+  moveFloat(e.clientX, e.clientY);
+  updateGhost(e.clientX, e.clientY);
+}
+function endDragCleanup() {
+  window.removeEventListener("pointermove", onDragMove);
+  hideGhost();
+  if (drag) { slots[drag.slotIdx].btn.classList.remove("drag-src"); }
+}
+function onDragEnd(e) {
+  if (!drag) return;
+  const d = drag;
+  endDragCleanup();
+  const t = d.target;
+  if (t && t.valid && canPlace(d.piece, t.oi, t.oj)) {
+    d.floatCv.remove();
+    drag = null;
+    tray[d.slotIdx] = null;
+    refreshSlots(false);
+    const cleared = placePiece(d.piece, t.oi, t.oj);
+    SFX.place();
+    if (!cleared) afterMove();   // no clear → check tray/game-over now; clear path checks in finalizeClear()
+    return;
+  }
+  if (t && !t.valid) SFX.invalid();
+  // snap back to slot
+  const slot = slots[d.slotIdx].btn.getBoundingClientRect();
+  const w = d.floatCv.offsetWidth, h = d.floatCv.offsetHeight;
+  d.floatCv.style.transition = "transform .3s cubic-bezier(.3,1.4,.5,1), opacity .3s";
+  d.floatCv.style.transform = `translate(${slot.left + slot.width / 2 - w / 2}px, ${slot.top + slot.height / 2 - h / 2}px) scale(.4)`;
+  d.floatCv.style.opacity = "0";
+  const cv = d.floatCv;
+  setTimeout(() => cv.remove(), 320);
+  drag = null;
+}
+function onDragCancel() {
+  if (!drag) return;
+  const cv = drag.floatCv;
+  endDragCleanup();
+  cv.remove();
+  drag = null;
+}
+
+// ---------- Pause / resume / mute ----------
+function togglePause() {
+  if (mode === "play") {
+    mode = "pause";
+    feverLeft = Math.max(0, feverUntil - performance.now());
+    feverUntil = 0;                 // absolute clock freezes while paused
+    feverEl.classList.remove("on");
+    showScreen("pauseScr");
+    SFX.button();
+  } else if (mode === "pause") {
+    mode = "play";
+    feverUntil = performance.now() + feverLeft;
+    hideScreens();
+    SFX.button();
+  }
+}
+$("pauseBtn").addEventListener("click", togglePause);
+$("resumeBtn").addEventListener("click", togglePause);
+$("quitBtn").addEventListener("click", () => { mode = "menu"; feverUntil = 0; feverEl.classList.remove("on"); $("mBest").textContent = best.toLocaleString(); showScreen("menu"); setTrayVisible(false); SFX.button(); });
+$("retryBtn").addEventListener("click", () => { SFX.button(); startGame(); });
+$("menuBtn").addEventListener("click", () => { mode = "menu"; feverUntil = 0; feverEl.classList.remove("on"); $("mBest").textContent = best.toLocaleString(); showScreen("menu"); setTrayVisible(false); SFX.button(); });
+$("playBtn").addEventListener("click", () => { SFX.unlock(); SFX.button(); startGame(); });
+$("muteBtn").addEventListener("click", () => { $("muteBtn").textContent = SFX.toggleMute() ? "🔇" : "🔊"; });
+$("muteBtn").textContent = SFX.isMuted() ? "🔇" : "🔊";
+
+window.addEventListener("keydown", e => {
+  if (e.code === "Escape" && !e.repeat) { if (mode === "play" || mode === "pause") togglePause(); }
+  else if (e.code === "KeyM" && !e.repeat) { $("muteBtn").textContent = SFX.toggleMute() ? "🔇" : "🔊"; }
+});
+window.addEventListener("blur", () => { if (mode === "play") togglePause(); });
+
+// ---------- Main loop ----------
+let last = performance.now();
+function frame(now) {
+  requestAnimationFrame(frame);
+  let dt = (now - last) / 1000;
+  last = now;
+  if (dt > 0.05) dt = 0.05;
+
+  // starfield drift
+  stars.rotation.y = now * 0.000018;
+
+  // clear-line animation (frozen while paused)
+  if (clearing && mode !== "pause") {
+    clearing.t += dt;
+    const p = Math.min(1, clearing.t / clearing.dur);
+    const ease = p * p;
+    const s = 1 - ease;
+    clearScale.clear();
+    for (const idx of clearing.set) clearScale.set(idx, s);
+    syncInstances();
+    if (p >= 1) finalizeClear();
+  }
+
+  // fever countdown (only while actively playing)
+  if (mode === "play" && feverUntil > now) {
+    feverEl.classList.add("on");
+    feverTimeEl.textContent = Math.ceil((feverUntil - now) / 1000);
+  } else if (mode === "play" && feverUntil > 0 && feverUntil <= now) {
+    feverUntil = 0;
+    feverEl.classList.remove("on");
+  }
+
+  // camera: parallax + shake decay
+  parX += (parTarget.x - parX) * Math.min(1, dt * 4.5);
+  parY += (parTarget.y - parY) * Math.min(1, dt * 4.5);
+  shake = Math.max(0, shake - dt * 2.4);
+  const shX = shake > 0 ? (Math.random() - 0.5) * shake * 0.9 : 0;
+  const shY = shake > 0 ? (Math.random() - 0.5) * shake * 0.9 : 0;
+  camera.position.set(camBase.x + parX + shX, camBase.y + parY * 0.7 + shY, camBase.z);
+  camera.lookAt(camTarget);
+
+  updateParticles(dt);
+  renderer.render(scene, camera);
+}
+
+// ---------- Boot ----------
+$("mBest").textContent = best.toLocaleString();
+buildTray();
+syncInstances();
+setTrayVisible(false);
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 160" width="340" height="160" role="img">
+  <defs>
+    <linearGradient id="bdBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2e1065"/>
+      <stop offset="48%" stop-color="#4c1d95"/>
+      <stop offset="100%" stop-color="#0e7490"/>
+    </linearGradient>
+    <linearGradient id="cubeTop" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c4b5fd"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="cubeSideA" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#4c1d95"/>
+    </linearGradient>
+    <linearGradient id="cubeSideB" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#0e7490"/>
+    </linearGradient>
+    <linearGradient id="cubeSideC" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#9d174d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="88%" r="55%">
+      <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#67e8f9" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="340" height="160" fill="url(#bdBg)"/>
+  <rect width="340" height="160" fill="url(#glow)"/>
+
+  <!-- pixel grid dots -->
+  <g fill="#ffffff" opacity="0.09">
+    <circle cx="26" cy="26" r="2"/><circle cx="52" cy="26" r="2"/><circle cx="78" cy="26" r="2"/><circle cx="104" cy="26" r="2"/>
+    <circle cx="238" cy="26" r="2"/><circle cx="264" cy="26" r="2"/><circle cx="290" cy="26" r="2"/><circle cx="316" cy="26" r="2"/>
+    <circle cx="26" cy="52" r="2"/><circle cx="316" cy="52" r="2"/>
+  </g>
+
+  <!-- isometric block stack -->
+  <g stroke="rgba(255,255,255,.28)" stroke-width="1.4" stroke-linejoin="round">
+    <!-- bottom blocks -->
+    <g transform="translate(96,96)">
+      <polygon points="0,-14 26,0 0,14 -26,0" fill="url(#cubeTop)"/>
+      <polygon points="-26,0 0,14 0,40 -26,26" fill="url(#cubeSideA)"/>
+      <polygon points="26,0 0,14 0,40 26,26" fill="#5b21b6"/>
+    </g>
+    <g transform="translate(148,96)">
+      <polygon points="0,-14 26,0 0,14 -26,0" fill="#99f6e4"/>
+      <polygon points="-26,0 0,14 0,40 -26,26" fill="url(#cubeSideB)"/>
+      <polygon points="26,0 0,14 0,40 26,26" fill="#155e75"/>
+    </g>
+    <g transform="translate(200,96)">
+      <polygon points="0,-14 26,0 0,14 -26,0" fill="#fbcfe8"/>
+      <polygon points="-26,0 0,14 0,40 -26,26" fill="url(#cubeSideC)"/>
+      <polygon points="26,0 0,14 0,40 26,26" fill="#831843"/>
+    </g>
+    <!-- middle block -->
+    <g transform="translate(122,60)">
+      <polygon points="0,-14 26,0 0,14 -26,0" fill="#fef08a"/>
+      <polygon points="-26,0 0,14 0,40 -26,26" fill="#ca8a04"/>
+      <polygon points="26,0 0,14 0,40 26,26" fill="#713f12"/>
+    </g>
+    <!-- top falling block -->
+    <g transform="translate(174,24)">
+      <polygon points="0,-13 24,0 0,13 -24,0" fill="#ffffff"/>
+      <polygon points="-24,0 0,13 0,37 -24,24" fill="#38d6ff"/>
+      <polygon points="24,0 0,13 0,37 24,24" fill="#0e7490"/>
+    </g>
+    <!-- motion ticks above falling block -->
+    <g stroke="#67e8f9" stroke-width="2.4" stroke-linecap="round" opacity="0.9">
+      <line x1="174" y1="2" x2="174" y2="-8"/>
+      <line x1="160" y1="6" x2="153" y2="-2"/>
+      <line x1="188" y1="6" x2="195" y2="-2"/>
+    </g>
+  </g>
+
+  <!-- text -->
+  <g font-family="Inter, system-ui, sans-serif" text-anchor="middle">
+    <text x="170" y="146" font-size="19" font-weight="900" fill="#ffffff" letter-spacing="3.2">BLOCK DROP 3D</text>
+    <text x="170" y="157" font-size="7.6" font-weight="700" fill="#c4b5fd" letter-spacing="3.6">ROWS · COMBOS · PRISM FEVER</text>
+  </g>
+</svg>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 160" width="340" height="160" role="img">
+  <defs>
+    <linearGradient id="nrBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b0220"/>
+      <stop offset="45%" stop-color="#2a0747"/>
+      <stop offset="78%" stop-color="#7a115e"/>
+      <stop offset="100%" stop-color="#ff2d95"/>
+    </linearGradient>
+    <linearGradient id="nrSun" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffe45e"/>
+      <stop offset="55%" stop-color="#ff9a2e"/>
+      <stop offset="100%" stop-color="#ff2d95"/>
+    </linearGradient>
+    <linearGradient id="nrRoad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#160028"/>
+      <stop offset="100%" stop-color="#3d0b57"/>
+    </linearGradient>
+    <linearGradient id="nrCar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0a0118"/>
+      <stop offset="50%" stop-color="#241040"/>
+      <stop offset="100%" stop-color="#0a0118"/>
+    </linearGradient>
+    <filter id="nrGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="nrCut">
+      <rect x="0" y="0" width="340" height="160"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#nrCut)">
+    <rect width="340" height="160" fill="url(#nrBg)"/>
+    <g fill="#f8e9ff" opacity=".65">
+      <circle cx="31" cy="22" r="1.1"/><circle cx="66" cy="37" r=".8"/><circle cx="104" cy="17" r="1"/>
+      <circle cx="144" cy="31" r=".7"/><circle cx="203" cy="15" r="1.1"/><circle cx="241" cy="34" r=".8"/>
+      <circle cx="281" cy="20" r="1"/><circle cx="310" cy="45" r=".7"/><circle cx="20" cy="52" r=".7"/>
+    </g>
+    <circle cx="170" cy="88" r="45" fill="url(#nrSun)" opacity=".9"/>
+    <g fill="#7a115e" opacity=".85">
+      <rect x="0" y="84" width="340" height="3"/><rect x="0" y="92" width="340" height="4"/>
+      <rect x="0" y="101" width="340" height="5"/>
+    </g>
+    <path d="M0 104 L52 80 L92 96 L138 70 L178 92 L226 74 L274 94 L340 76 L340 108 L0 108 Z" fill="#1a0533" opacity=".92"/>
+    <path d="M0 108 L340 108 L340 160 L0 160 Z" fill="url(#nrRoad)"/>
+    <g stroke="#ff2d95" stroke-width="1.1" opacity=".75" fill="none">
+      <path d="M-30 160 L128 108"/><path d="M40 160 L146 108"/><path d="M112 160 L162 108"/>
+      <path d="M228 160 L178 108"/><path d="M300 160 L194 108"/><path d="M370 160 L212 108"/>
+      <path d="M0 118 L340 118"/><path d="M0 132 L340 132"/><path d="M0 150 L340 150"/>
+    </g>
+    <g stroke="#22d3ee" stroke-width="2" opacity=".55" filter="url(#nrGlow)">
+      <line x1="0" y1="108" x2="340" y2="108"/>
+    </g>
+    <g transform="translate(170 116)">
+      <ellipse cx="0" cy="14" rx="34" ry="6" fill="#000" opacity=".55"/>
+      <path d="M-26 6 L-18 -8 L-6 -12 L-2 -4 L6 -4 L12 -13 L24 -8 L28 3 L18 10 L-20 10 Z" fill="url(#nrCar)"/>
+      <path d="M-13 -6 L-6 -9 L-2 -3 L-12 -2 Z" fill="#22d3ee" opacity=".85"/>
+      <path d="M8 -9 L17 -6 L19 -2 L9 -3 Z" fill="#ff2d95" opacity=".85"/>
+      <rect x="-8" y="6" width="16" height="3" rx="1.5" fill="#ff8a1e" filter="url(#nrGlow)"/>
+      <circle cx="-16" cy="10" r="4.2" fill="#05010e"/><circle cx="-16" cy="10" r="2" fill="#22d3ee"/>
+      <circle cx="18" cy="10" r="4.2" fill="#05010e"/><circle cx="18" cy="10" r="2" fill="#ff2d95"/>
+      <g stroke="#22d3ee" stroke-width="2" stroke-linecap="round" opacity=".6">
+        <line x1="-30" y1="0" x2="-48" y2="0"/><line x1="-29" y1="5" x2="-44" y2="8"/>
+      </g>
+    </g>
+    <g font-family="Inter, system-ui, sans-serif" text-anchor="middle">
+      <text x="170" y="137" font-size="21" font-weight="900" fill="#fff" letter-spacing="3.6" style="font-style:italic;text-shadow:0 0 12px #ff2d95">NEON RUSH</text>
+      <text x="170" y="150" font-size="8" font-weight="800" fill="#ffd9f5" letter-spacing="3.1">40 LEVEL CAMPAIGN</text>
+    </g>
+  </g>
+</svg>

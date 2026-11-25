@@ -32,7 +32,7 @@ function buildHero(){
       ${f.thumbImage ? `<img src="${f.thumbImage}" alt="${f.title}" class="hero-media-img">` : `<span class="hero-media-icon">${f.thumbIcon}</span>`}
     </div>
     <div class="hero-content">
-      <h1>${f.title} — <span>Stages</span></h1>
+      <h1>${f.title}</h1>
       <p>${f.description}</p>
       <div class="hero-meta">
         <span class="pill">★ ${f.rating} • ${f.plays} plays</span>

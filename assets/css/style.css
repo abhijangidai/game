@@ -135,7 +135,7 @@ img{max-width:100%;display:block}
 
 /* game grid - centered single */
 .grid{
-  display:grid; grid-template-columns: repeat(3, 1fr); gap:18px;
+  display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 360px)); gap:18px; justify-content:center;
 }
 .grid.single{grid-template-columns: minmax(0, 360px); justify-content:center}
 .card{
