@@ -31,9 +31,9 @@ const GAMES = [
     thumbIcon: "🧊",
     thumbImage: "assets/img/block-drop-thumb.svg",
     url: "games/block-drop-3d/index.html",
-    description: "Drop neon 3D blocks onto the grid, clear full rows and columns, chain huge combos and ignite Prism Fever x2. Silky 60 FPS on any device!",
-    controls: "Drag pieces with mouse or touch - Esc pause - M mute",
-    tags: ["3D", "Puzzle", "Blocks", "Combo"]
+    description: "Drop neon 3D blocks, clear rows and columns, chain combos and ignite Prism Fever x2. Earn bomb, hammer and shuffle power-ups, chase Perfect Clears, unlock achievements and climb seven ranks!",
+    controls: "Drag pieces with mouse or touch - 1/2/3 power-ups - Esc pause - M mute",
+    tags: ["3D", "Puzzle", "Blocks", "Combo", "Power-ups", "Ranks"]
   },
   {
     id: "shadow-hunter",

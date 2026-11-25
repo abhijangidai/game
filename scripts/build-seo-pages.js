@@ -50,30 +50,36 @@ const PAGES = [
     rating: "4.8",
     plays: "24K",
     metaTitle: "Block Drop 3D — Free Neon Puzzle Game | Gamealltime",
-    metaDesc: "Play Block Drop 3D free online. Drop neon blocks, clear rows and columns, chain combos and trigger Prism Fever in this smooth browser puzzle game.",
-    lead: "A neon block puzzle with smooth 3D pieces, combo chains and a Prism Fever multiplier. No timer, no download — just one more run.",
+    metaDesc: "Play Block Drop 3D free online. Drop neon blocks, clear rows and columns, chain combos, trigger Prism Fever x2 and use bombs, hammers and shuffles. Climb ranks and unlock achievements.",
+    lead: "A neon block puzzle with 3D pieces, combo chains, Prism Fever and three game-changing power-ups. No timer, no download — just one more run.",
     about: [
-      "Block Drop 3D is a modern take on the falling-block puzzle. Drag pieces onto the board, fill complete rows or columns and keep the stack under control. Chain clears and multi-line drops build the Fever meter, and triggering Prism Fever doubles your scoring window.",
-      "The game is built to run smoothly at 60 frames per second and supports mouse, touch and drag controls. There is no timer and no download, so you can play at your own pace, chase a new high score and restart instantly."
+      "Block Drop 3D is a modern take on the falling-block puzzle. Drag pieces onto the board, fill complete rows or columns and keep the stack under control. Chain clears and multi-line drops build the Next Fever meter; every 10 lines ignites Prism Fever, which doubles all points for 20 seconds.",
+      "Clear lines to earn bomb, hammer and shuffle charges — one power-up every five lines, up to three of each. Every run feeds a persistent rank ladder from Spark to Prism Master, with XP awarded for score, lines, combos and Fevers. Ten achievements track milestones such as Perfect Clears, five-time combos and 100 lifetime lines.",
+      "The game is built to run smoothly at 60 frames per second and supports mouse, touch and keyboard controls. There is no timer and no download, so you can play at your own pace, chase a new high score and restart instantly. Progress is saved locally in your browser."
     ],
     howto: [
       "Drag a 3D piece from the tray onto the grid.",
       "Fill an entire row or column to clear it and open up space.",
-      "Chain clears without breaking your run to build the Prism Fever meter.",
-      "Use Esc to pause and M to mute the sound."
+      "Chain clears without breaking your run to build the Next Fever meter — every 10 lines triggers Prism Fever x2.",
+      "Spend charges earned from line clears: press 1 to bomb a 3×3 area, 2 to hammer one block, or 3 to shuffle the tray.",
+      "Empty the whole board for a Perfect Clear bonus, and use Esc to pause or M to mute."
     ],
-    controls: ["Mouse / touch — drag pieces", "Esc — pause", "M — mute"],
+    controls: ["Mouse / touch — drag pieces", "1 — bomb (then tap a cell)", "2 — hammer (then tap a block)", "3 — shuffle tray", "Esc — pause / cancel targeting", "M — mute"],
     features: [
       "Smooth 3D blocks with a neon arcade look",
       "Row and column clears with chain scoring",
-      "Prism Fever doubles your points while active",
-      "Mouse, touch and drag controls",
-      "No timer, no download and instant restarts"
+      "Prism Fever x2 every 10 lines, with a live Next Fever meter",
+      "Bomb, hammer and shuffle power-ups earned every 5 lines",
+      "Perfect Clear bonuses and 10 unlockable achievements",
+      "Seven ranks from Spark to Prism Master with persistent XP",
+      "Mouse, touch and keyboard controls — no timer or download"
     ],
     faq: [
       { q: "Is Block Drop 3D free?", a: "Yes. The full puzzle game is free to play in your browser with no account required." },
-      { q: "Can I play Block Drop 3D on a phone?", a: "Yes. Pieces are dragged with a finger, and the interface adapts to smaller screens." },
-      { q: "What is Prism Fever?", a: "Prism Fever is a x2 scoring mode that activates when you build the combo meter by chaining line clears." }
+      { q: "Can I play Block Drop 3D on a phone?", a: "Yes. Pieces are dragged with a finger, power-ups are tapped on screen, and the interface adapts to smaller screens." },
+      { q: "What is Prism Fever?", a: "Prism Fever is a x2 scoring mode that activates every time you clear 10 lines. It lasts 20 seconds, and the Next Fever meter shows how close you are." },
+      { q: "How do power-ups work?", a: "You earn one bomb, hammer or shuffle charge for every 5 lines cleared, up to three of each. Bomb clears a 3×3 area, hammer removes a single block, and shuffle rerolls the piece tray. Press 1, 2 or 3, or tap the buttons at the top right." },
+      { q: "Is my progress saved?", a: "Yes. Your best score, total lines, XP, rank and unlocked achievements are saved automatically in your browser's local storage. No account is needed." }
     ],
     related: ["neon-rush-3d", "road-fury", "shadow-hunter"]
   },

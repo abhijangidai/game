@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b1020">
 <title>Block Drop 3D — Play Free on Gamealltime</title>
-<meta name="description" content="Block Drop 3D — drag and drop 3D blocks, clear full rows and columns, chain combos and trigger Prism Fever. Free, instant play, auto-saves.">
+<meta name="description" content="Block Drop 3D — drop neon 3D blocks, clear rows and columns, chain combos, trigger Prism Fever x2 and earn bomb, hammer and shuffle power-ups. Unlock achievements and climb ranks. Free, instant play, auto-saves.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -44,7 +44,8 @@ html,body{
 .chip .k{font-size:10px;letter-spacing:.14em;font-weight:800;color:var(--muted)}
 .chip .v{font:800 clamp(17px,2.6vw,24px)/1.15 ui-monospace,Menlo,Consolas,monospace;color:#fff;font-variant-numeric:tabular-nums}
 .chip .v.gold{color:#ffd166;text-shadow:0 0 18px rgba(255,209,102,.45)}
-#hudRight{display:flex;gap:8px;align-items:center;pointer-events:auto}
+#hudRight{display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:auto}
+.hud-icons{display:flex;gap:8px}
 .icon-btn{
   width:44px;height:44px;border-radius:13px;border:1px solid var(--line);
   background:var(--panel);color:var(--text);font-size:19px;cursor:pointer;
@@ -142,6 +143,111 @@ html,body{
   background:rgba(255,209,102,.08);color:#ffd166;border-radius:999px;padding:8px 20px;
   font-weight:800;letter-spacing:.08em;font-size:clamp(12px,1.6vw,15px);
 }
+
+/* ---------- Rank / progression ---------- */
+.rank-card{
+  display:flex;align-items:center;gap:12px;width:min(380px,88vw);
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:10px 14px;text-align:left;
+}
+.rank-badge{
+  width:44px;height:44px;flex:none;border-radius:13px;display:grid;place-items:center;
+  font-size:22px;font-weight:900;background:rgba(167,139,250,.12);
+  border:1px solid rgba(167,139,250,.35);color:#c4b5fd;
+}
+.rank-main{flex:1;min-width:0}
+.rank-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.rank-top b{font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.rank-top span{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.04em;white-space:nowrap}
+.rank-bar{height:6px;margin-top:6px;border-radius:999px;background:rgba(148,184,255,.14);overflow:hidden}
+.rank-bar i{display:block;height:100%;width:0%;border-radius:inherit;background:linear-gradient(90deg,#a78bfa,#38d6ff);transition:width .45s ease}
+.rank-next{margin-top:5px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.03em}
+.ach-line{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.03em}
+.over-rank{width:min(380px,88vw)}
+
+/* ---------- HUD fever meter ---------- */
+#hudLeft{display:flex;flex-direction:column;gap:6px;align-items:flex-start;min-width:0}
+.chips{display:flex;gap:8px}
+#feverMeter{
+  display:flex;align-items:center;gap:8px;width:100%;
+  background:var(--panel);border:1px solid var(--line);border-radius:999px;
+  padding:4px 10px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+#feverMeter span{font-size:8px;font-weight:800;letter-spacing:.12em;color:var(--muted);white-space:nowrap}
+.fm-bar{flex:1;height:4px;border-radius:999px;background:rgba(148,184,255,.16);overflow:hidden;min-width:40px}
+.fm-bar i{display:block;height:100%;width:0%;border-radius:inherit;background:linear-gradient(90deg,#a78bfa,#38d6ff);transition:width .25s}
+.fm-bar i.active{background:linear-gradient(90deg,#ffd166,#ff8a5c)}
+#feverMeter b{font-size:9px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+#feverMeter.active{border-color:rgba(255,209,102,.55);box-shadow:0 0 18px rgba(255,209,102,.2)}
+#feverMeter.active b{color:#ffd166}
+
+/* ---------- Fever glow ---------- */
+#feverGlow{
+  position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;transition:opacity .45s;
+  background:radial-gradient(ellipse at 50% 55%,transparent 38%,rgba(124,58,237,.18) 72%,rgba(56,214,255,.22) 100%);
+  box-shadow:inset 0 0 140px rgba(124,58,237,.35);
+}
+#feverGlow.on{opacity:1}
+
+/* ---------- Power-ups ---------- */
+#powers{
+  display:none;flex-direction:column;gap:6px;padding:6px;border-radius:16px;
+  background:rgba(9,14,30,.55);border:1px solid var(--line);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:0 8px 30px rgba(0,0,0,.4);
+}
+.power{
+  position:relative;display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:12px;
+  background:rgba(148,184,255,.08);border:1px solid var(--line);color:var(--text);
+  font-family:inherit;font-size:11px;font-weight:900;letter-spacing:.08em;cursor:pointer;
+  transition:transform .12s,border-color .12s,box-shadow .12s,opacity .12s;
+}
+.power:hover{transform:translateY(-2px);border-color:rgba(167,139,250,.55);box-shadow:0 0 18px rgba(124,58,237,.3)}
+.power:active{transform:scale(.95)}
+.power .p-ic{font-size:20px;line-height:1}
+.power .p-name{display:none}
+.power .p-count{
+  position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;
+  display:grid;place-items:center;background:#7c3aed;color:#fff;font-size:10px;font-weight:900;
+  border:1px solid rgba(255,255,255,.28);font-variant-numeric:tabular-nums;
+  box-shadow:0 2px 8px rgba(0,0,0,.45);
+}
+.power .p-key{
+  position:absolute;bottom:1px;right:4px;font-size:7px;font-weight:800;color:var(--muted);line-height:1;
+}
+.power.empty{opacity:.38}
+.power.empty .p-count{background:rgba(148,184,255,.3)}
+.power.armed{border-color:#ffd166;box-shadow:0 0 22px rgba(255,209,102,.4);background:rgba(255,209,102,.12);animation:armPulse 1.1s ease-in-out infinite}
+@keyframes armPulse{0%,100%{box-shadow:0 0 14px rgba(255,209,102,.3)}50%{box-shadow:0 0 26px rgba(255,209,102,.6)}}
+#targetHint{
+  position:absolute;top:max(98px,calc(env(safe-area-inset-top) + 88px));left:50%;transform:translateX(-50%);
+  z-index:7;display:none;background:rgba(11,16,32,.94);border:1px solid rgba(255,209,102,.65);
+  color:#ffd166;font-size:11px;font-weight:800;letter-spacing:.03em;border-radius:999px;
+  padding:6px 14px;white-space:nowrap;pointer-events:none;
+  box-shadow:0 8px 30px rgba(0,0,0,.55),0 0 22px rgba(255,209,102,.18);
+}
+@media (max-width:520px){#targetHint{font-size:10px;padding:5px 11px;max-width:calc(100vw - 20px);overflow:hidden;text-overflow:ellipsis}}
+#targetHint.on{display:block}
+
+/* ---------- Toasts ---------- */
+#toasts{
+  position:fixed;top:max(12px,env(safe-area-inset-top));right:12px;z-index:30;
+  display:flex;flex-direction:column;gap:8px;width:min(310px,calc(100vw - 24px));pointer-events:none;
+}
+.toast{
+  display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:14px;
+  background:rgba(20,28,51,.95);border:1px solid rgba(167,139,250,.45);
+  box-shadow:0 12px 40px rgba(0,0,0,.5);backdrop-filter:blur(10px);
+  animation:toastIn .35s cubic-bezier(.2,1.4,.4,1);
+}
+.toast.out{animation:toastOut .35s forwards}
+@keyframes toastIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateX(28px)}}
+.t-ic{font-size:22px;line-height:1;flex:none}
+.t-kicker{font-size:8px;letter-spacing:.14em;font-weight:900;color:#c4b5fd}
+.t-title{font-size:13px;font-weight:900;margin-top:1px}
+.t-desc{font-size:10.5px;color:var(--muted);line-height:1.35;margin-top:2px}
+
 .btn{
   border:0;border-radius:16px;cursor:pointer;font-family:inherit;font-weight:900;letter-spacing:.1em;
   color:#0b1020;background:linear-gradient(135deg,#a78bfa,#38d6ff);
@@ -191,10 +297,22 @@ html,body{
   padding:6px 14px;border-radius:999px;font-size:11px;pointer-events:none;white-space:nowrap;backdrop-filter:blur(6px);
 }
 @media (pointer:coarse) and (orientation:portrait){#rot{display:block}}
+@media (max-width:520px){
+  .chip{min-width:64px;padding:5px 9px}
+  .chip .k{font-size:9px}
+  .icon-btn{width:38px;height:38px;font-size:17px}
+  #powers{padding:5px;gap:5px}
+  .power{width:38px;height:38px;border-radius:10px}
+  .power .p-ic{font-size:17px}
+  .power .p-key{display:none}
+  #feverMeter{padding:3px 8px}
+  #feverMeter span{font-size:7px}
+}
+@media (max-height:640px){.howto{display:none}}
 @media (max-height:480px){
-  .howto{display:none}
   .title{font-size:clamp(30px,7vh,44px)}
   .slot{width:clamp(70px,17vh,96px);height:clamp(70px,17vh,96px)}
+  .power{width:36px;height:36px}
 }
 </style>
 <link rel="canonical" href="https://abhijangidai.github.io/game/play/block-drop-3d.html">
@@ -203,17 +321,38 @@ html,body{
 <body>
 
 <canvas id="gl"></canvas>
+<div id="feverGlow"></div>
 
 <!-- HUD -->
-<div id="hud" aria-hidden="true">
-  <div style="display:flex;gap:8px">
-    <div class="chip"><div class="k">SCORE</div><div class="v" id="hScore">0</div></div>
-    <div class="chip"><div class="k">BEST</div><div class="v gold" id="hBest">0</div></div>
-    <div class="chip"><div class="k">LINES</div><div class="v" id="hLines">0</div></div>
+<div id="hud">
+  <div id="hudLeft">
+    <div class="chips">
+      <div class="chip"><div class="k">SCORE</div><div class="v" id="hScore">0</div></div>
+      <div class="chip"><div class="k">BEST</div><div class="v gold" id="hBest">0</div></div>
+      <div class="chip"><div class="k">LINES</div><div class="v" id="hLines">0</div></div>
+    </div>
+    <div id="feverMeter">
+      <span>NEXT FEVER</span>
+      <div class="fm-bar"><i id="fmFill"></i></div>
+      <b id="fmCount">0/10</b>
+    </div>
   </div>
   <div id="hudRight">
-    <button class="icon-btn" id="muteBtn" aria-label="Toggle sound">🔊</button>
-    <button class="icon-btn" id="pauseBtn" aria-label="Pause game">⏸</button>
+    <div class="hud-icons">
+      <button class="icon-btn" id="muteBtn" aria-label="Toggle sound">🔊</button>
+      <button class="icon-btn" id="pauseBtn" aria-label="Pause game">⏸</button>
+    </div>
+    <div id="powers" role="group" aria-label="Power-ups">
+      <button class="power" data-power="bomb" title="Bomb — clear a 3×3 area (1)">
+        <span class="p-ic">💣</span><span class="p-name">BOMB</span><span class="p-count" id="pBomb">1</span><span class="p-key">1</span>
+      </button>
+      <button class="power" data-power="hammer" title="Hammer — smash one block (2)">
+        <span class="p-ic">🔨</span><span class="p-name">HAMMER</span><span class="p-count" id="pHammer">1</span><span class="p-key">2</span>
+      </button>
+      <button class="power" data-power="shuffle" title="Shuffle — reroll the tray (3)">
+        <span class="p-ic">🔀</span><span class="p-name">SHUFFLE</span><span class="p-count" id="pShuffle">1</span><span class="p-key">3</span>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -222,19 +361,32 @@ html,body{
 <div id="pop"></div>
 <div id="rot">Rotate to landscape for the biggest board</div>
 
+<div id="targetHint" role="status"></div>
+<div id="toasts" aria-live="polite"></div>
+
 <!-- Tray -->
 <div id="tray" aria-label="Piece tray"></div>
 
 <!-- MENU -->
 <section class="screen on" id="menu" role="dialog" aria-label="Main menu">
   <h1 class="title"><small>GAMEALLTIME</small>BLOCK<br>DROP 3D</h1>
-  <p class="sub">Drop neon blocks onto the grid, fill complete rows or columns to clear them, and chain clears into massive combos. Every 10 lines ignites <b style="color:#c4b5fd">Prism Fever ×2</b>.</p>
+  <p class="sub">Drop neon blocks onto the grid, fill complete rows or columns, and chain clears into massive combos. Every 10 lines ignites <b style="color:#c4b5fd">Prism Fever ×2</b>. Clear lines to earn <b style="color:#ffd166">power-up charges</b> and climb the ranks.</p>
   <div class="best-chip">👑 BEST&nbsp;&nbsp;<span id="mBest">0</span></div>
+  <div class="rank-card" id="menuRank">
+    <div class="rank-badge" id="mRankIcon">✦</div>
+    <div class="rank-main">
+      <div class="rank-top"><b id="mRank">Spark</b><span id="mXp">0 XP</span></div>
+      <div class="rank-bar"><i id="mXpFill"></i></div>
+      <div class="rank-next" id="mRankNext">300 XP to Glow</div>
+    </div>
+  </div>
+  <div class="ach-line" id="mAch">🏆 0/10 achievements · 0 games · 0 lines</div>
   <button class="btn" id="playBtn">▶&nbsp; PLAY</button>
   <div class="howto">
     <div class="how"><div class="ic">🫳</div><b>DRAG &amp; DROP</b><span>Pull any block piece from the tray onto the 8×8 board.</span></div>
     <div class="how"><div class="ic">💥</div><b>CLEAR LINES</b><span>Fill a full row or column to blast it away and score.</span></div>
     <div class="how"><div class="ic">⚡</div><b>COMBO &amp; FEVER</b><span>Back-to-back clears multiply points. 10 lines = Prism Fever ×2.</span></div>
+    <div class="how"><div class="ic">💣</div><b>POWER-UPS</b><span>Earn a charge every 5 lines: bomb a 3×3, smash one block, or shuffle the tray.</span></div>
   </div>
 </section>
 
@@ -245,7 +397,7 @@ html,body{
     <button class="btn" id="resumeBtn">▶&nbsp; RESUME</button>
     <button class="btn alt" id="quitBtn">MAIN MENU</button>
   </div>
-  <p class="sub" style="font-size:12px">Esc — resume · M — mute</p>
+  <p class="sub" style="font-size:12px">Esc — resume · M — mute · 1 / 2 / 3 — power-ups</p>
 </section>
 
 <!-- GAME OVER -->
@@ -257,6 +409,15 @@ html,body{
     <div class="stat"><div class="k">BEST</div><div class="v" id="oBest">0</div></div>
     <div class="stat"><div class="k">LINES</div><div class="v" id="oLines">0</div></div>
     <div class="stat"><div class="k">MAX COMBO</div><div class="v" id="oCombo">0</div></div>
+    <div class="stat"><div class="k">POWER-UPS</div><div class="v" id="oPowers">0</div></div>
+  </div>
+  <div class="rank-card over-rank">
+    <div class="rank-badge" id="oRankIcon">✦</div>
+    <div class="rank-main">
+      <div class="rank-top"><b id="oRank">Spark</b><span id="oXpGain">+0 XP</span></div>
+      <div class="rank-bar"><i id="oXpFill"></i></div>
+      <div class="rank-next" id="oRankNext">0 XP</div>
+    </div>
   </div>
   <div class="btn-row">
     <button class="btn" id="retryBtn">↻&nbsp; RETRY</button>
@@ -283,7 +444,7 @@ const BLOCK_H = 1.5;         // block height
 const HALF = (N - 1) / 2;    // 3.5
 const PRISM_EVERY = 10;      // lines per Prism Fever
 const FEVER_MS = 20000;      // fever duration
-const LS = { best: "bd3d_best", games: "bd3d_games", lines: "bd3d_lines", mute: "bd3d_mute" };
+const LS = { best: "bd3d_best", games: "bd3d_games", lines: "bd3d_lines", mute: "bd3d_mute", xp: "bd3d_xp", ach: "bd3d_ach" };
 
 const PALETTE = [
   { css: "#ff6b3d", three: 0xff6b3d },
@@ -295,6 +456,44 @@ const PALETTE = [
   { css: "#ff6bd6", three: 0xff6bd6 },
   { css: "#a3e635", three: 0xa3e635 },
 ];
+
+// ---------- Progression, achievements and power-ups ----------
+const RANKS = [
+  { name: "Spark",        xp: 0,    icon: "✦", color: "#8b9cc9" },
+  { name: "Glow",         xp: 300,  icon: "✧", color: "#38d6ff" },
+  { name: "Prism",        xp: 800,  icon: "◆", color: "#a78bfa" },
+  { name: "Radiance",     xp: 1600, icon: "★", color: "#ffd166" },
+  { name: "Nova",         xp: 3000, icon: "☄", color: "#ff8a5c" },
+  { name: "Eclipse",      xp: 5000, icon: "☾", color: "#ff6bd6" },
+  { name: "Prism Master", xp: 8000, icon: "♛", color: "#35e0a1" }
+];
+const ACHIEVEMENTS = [
+  { id: "first",    icon: "🧩", name: "First Drop",     desc: "Place your first piece." },
+  { id: "line",     icon: "💥", name: "Line Breaker",   desc: "Clear your first line." },
+  { id: "double",   icon: "✨", name: "Double Trouble", desc: "Clear 2+ lines at once." },
+  { id: "quad",     icon: "🌊", name: "Prism Sweep",    desc: "Clear 4+ lines at once." },
+  { id: "fever",    icon: "⚡", name: "Prism Powered",  desc: "Trigger Prism Fever." },
+  { id: "combo5",   icon: "🔥", name: "Combo ×5",       desc: "Reach a 5× combo." },
+  { id: "perfect",  icon: "🌟", name: "Perfect Clear",  desc: "Empty the entire board." },
+  { id: "score10k", icon: "💎", name: "High Roller",    desc: "Score 10,000 in one run." },
+  { id: "lines100", icon: "🏆", name: "Century",        desc: "Clear 100 lines in total." },
+  { id: "power3",   icon: "🚀", name: "Demolition",     desc: "Use 3 power-ups in one run." }
+];
+const POWER_DEFS = [
+  { id: "bomb",    icon: "💣", name: "Bomb",    key: "1", desc: "Clear a 3×3 area." },
+  { id: "hammer",  icon: "🔨", name: "Hammer",  key: "2", desc: "Smash one block." },
+  { id: "shuffle", icon: "🔀", name: "Shuffle", key: "3", desc: "Reroll the tray." }
+];
+const loadAch = () => {
+  try { return new Set(JSON.parse(localStorage.getItem(LS.ach) || "[]")); }
+  catch { return new Set(); }
+};
+const rankIndexFor = v => {
+  let r = 0;
+  for (let i = 0; i < RANKS.length; i++) if (v >= RANKS[i].xp) r = i;
+  return r;
+};
+const haptic = ms => { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {} };
 
 // ---------- Piece shapes (generated rotations, weighted deck) ----------
 const normCells = cells => {
@@ -349,9 +548,16 @@ let score = 0, combo = 0, maxCombo = 0, linesTotal = 0, piecesPlaced = 0;
 let nextFeverAt = PRISM_EVERY;
 let feverUntil = 0, feverLeft = 0;
 let best = +(localStorage.getItem(LS.best) || 0);
+let xp = Math.max(0, Number(localStorage.getItem(LS.xp)) || 0);
+const unlocked = loadAch();
 let clearing = null;                  // { set:Set<idx>, t, dur, lines }
 let tray = [null, null, null];
 let drag = null;                      // active drag session
+let powers = { bomb: 1, hammer: 1, shuffle: 1 };
+let powerUses = 0, powerRewardIdx = 0, nextPowerAt = 5;
+let targeting = null;                 // "bomb" | "hammer"
+let feversTriggered = 0;
+let lastFeverKey = "";
 const clearScale = new Map();         // cell idx -> scale during clear anim
 
 // ---------- DOM ----------
@@ -360,6 +566,10 @@ const glCanvas = $("gl");
 const trayEl = $("tray");
 const hScore = $("hScore"), hBest = $("hBest"), hLines = $("hLines");
 const comboEl = $("combo"), feverEl = $("fever"), feverTimeEl = $("feverTime");
+const powersEl = $("powers"), targetHint = $("targetHint"), toastsEl = $("toasts");
+const feverGlow = $("feverGlow"), fmFill = $("fmFill"), fmCount = $("fmCount");
+const mRankIcon = $("mRankIcon"), mRank = $("mRank"), mXp = $("mXp"), mXpFill = $("mXpFill"), mRankNext = $("mRankNext"), mAch = $("mAch");
+const oRankIcon = $("oRankIcon"), oRank = $("oRank"), oXpGain = $("oXpGain"), oXpFill = $("oXpFill"), oRankNext = $("oRankNext");
 const slots = [];
 
 // ---------- Audio (synth, no assets) ----------
@@ -405,6 +615,13 @@ const SFX = (() => {
       tone(2093, 0.22, "sine", 0.12, steps * 0.055);
     },
     fever()  { [523, 659, 784, 1319].forEach((f, i) => tone(f, 0.16, "square", 0.1, i * 0.07)); },
+    power()  { [660, 880, 1100].forEach((f, i) => tone(f, 0.09, "square", 0.1, i * 0.05)); },
+    bomb()   { tone(90, 0.34, "sawtooth", 0.28, 0, 38); tone(55, 0.4, "sine", 0.22, 0.02, 32); },
+    hammer() { tone(220, 0.1, "square", 0.2, 0, 110); tone(80, 0.16, "sine", 0.2, 0.02); },
+    shuffle(){ [420, 620, 840].forEach((f, i) => tone(f, 0.1, "triangle", 0.14, i * 0.04, f * 1.4)); },
+    ach()    { [880, 1108, 1318].forEach((f, i) => tone(f, 0.16, "sine", 0.14, i * 0.08)); },
+    rank()   { [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, 0.18, "triangle", 0.16, i * 0.09)); },
+    perfect(){ [523, 659, 784, 1047, 1319, 1568].forEach((f, i) => tone(f, 0.24, "square", 0.1, i * 0.06)); },
     over()   { [392, 330, 262, 196].forEach((f, i) => tone(f, 0.24, "triangle", 0.22, i * 0.14)); },
   };
 })();
@@ -550,6 +767,17 @@ const setGhost = (cells, originI, originJ, valid) => {
   }
 };
 const hideGhost = () => ghostPool.forEach(g => (g.visible = false));
+
+// Power-up target highlight
+const targetGeo = new THREE.BoxGeometry(CELL * 0.9, 0.08, CELL * 0.9);
+const targetMat = new THREE.MeshBasicMaterial({ color: 0xffd166, transparent: true, opacity: 0.42, depthWrite: false });
+const targetPool = Array.from({ length: 9 }, () => {
+  const m = new THREE.Mesh(targetGeo, targetMat);
+  m.visible = false;
+  scene.add(m);
+  return m;
+});
+const hideTarget = () => targetPool.forEach(m => (m.visible = false));
 
 // Starfield — pooled points, slow drift, one draw call
 const stars = (() => {
@@ -739,44 +967,86 @@ function placePiece(piece, oi, oj) {
   piecesPlaced++;
   const cellScore = piece.cells.length * 5 * (FEVER() ? 2 : 1);
   addScore(cellScore);
+  unlockAch("first");
   syncInstances();
 
   const { rows, cols } = findFullLines();
-  const lineCount = rows.length + cols.length;
-  if (lineCount > 0) {
-    const set = new Set();
-    for (const j of rows) for (let i = 0; i < N; i++) set.add(idxOf(i, j));
-    for (const i of cols) for (let j = 0; j < N; j++) set.add(idxOf(i, j));
-    combo++;
-    maxCombo = Math.max(maxCombo, combo);
-    const base = [0, 150, 400, 750, 1200, 1800, 2400];
-    const pts = (base[Math.min(lineCount, 6)] * combo) * (FEVER() ? 2 : 1);
-    addScore(pts);
-    linesTotal += lineCount;
-    clearing = { set, t: 0, dur: 0.34, lines: lineCount };
-    SFX.clear(lineCount);
-    addShake(0.35 + lineCount * 0.22);
-    popup("+" + pts.toLocaleString(), lineCount >= 3 ? "big" : "");
-    if (lineCount >= 3) popup(lineCount + " LINES!", "big");
-    if (combo >= 2) popup("COMBO ×" + combo, "");
-    checkFeverUnlock();
-    updateHUD();
-    return true;
-  }
+  if (clearLines(rows, cols)) return true;
   combo = 0;
   updateHUD();
   return false;
 }
+
+function clearLines(rows, cols) {
+  const lineCount = rows.length + cols.length;
+  if (!lineCount) return false;
+  const set = new Set();
+  for (const j of rows) for (let i = 0; i < N; i++) set.add(idxOf(i, j));
+  for (const i of cols) for (let j = 0; j < N; j++) set.add(idxOf(i, j));
+  combo++;
+  maxCombo = Math.max(maxCombo, combo);
+  const base = [0, 150, 400, 750, 1200, 1800, 2400];
+  const pts = (base[Math.min(lineCount, 6)] * combo) * (FEVER() ? 2 : 1);
+  addScore(pts);
+  linesTotal += lineCount;
+  clearing = { set, t: 0, dur: 0.34, lines: lineCount };
+  SFX.clear(lineCount);
+  addShake(0.35 + lineCount * 0.22);
+  haptic(18 + lineCount * 10);
+  popup("+" + pts.toLocaleString(), lineCount >= 3 ? "big" : "");
+  if (lineCount >= 3) popup(lineCount + " LINES!", "big");
+  if (combo >= 2) popup("COMBO ×" + combo, "");
+  checkFeverUnlock();
+  checkLineAchievements(lineCount);
+  rewardPower();
+  updateHUD();
+  return true;
+}
+
+function checkLineAchievements(lineCount) {
+  unlockAch("line");
+  if (lineCount >= 2) unlockAch("double");
+  if (lineCount >= 4) unlockAch("quad");
+  if (combo >= 5) unlockAch("combo5");
+  const total = (+localStorage.getItem(LS.lines) || 0) + linesTotal;
+  if (total >= 100) unlockAch("lines100");
+}
+
+function rewardPower() {
+  while (linesTotal >= nextPowerAt) {
+    nextPowerAt += 5;
+    const available = POWER_DEFS.filter(p => powers[p.id] < 3);
+    if (!available.length) {
+      addScore(250);
+      popup("+250 MAX POWER BONUS", "");
+      continue;
+    }
+    const def = available[powerRewardIdx++ % available.length];
+    powers[def.id]++;
+    updatePowers();
+    popup("+1 " + def.icon + " " + def.name.toUpperCase(), "");
+    SFX.power();
+  }
+}
+
 function checkFeverUnlock() {
   if (linesTotal >= nextFeverAt) {
     nextFeverAt += PRISM_EVERY;
     feverUntil = performance.now() + FEVER_MS;
+    feversTriggered++;
     feverEl.classList.add("on");
+    feverGlow.classList.add("on");
     popup("⚡ PRISM FEVER ×2", "fever");
     SFX.fever();
+    haptic(40);
+    unlockAch("fever");
   }
 }
-function addScore(n) { score += n; }
+
+function addScore(n) {
+  score += n;
+  if (score >= 10000) unlockAch("score10k");
+}
 
 function finalizeClear() {
   // award bursts per cleared cell using its color
@@ -790,7 +1060,18 @@ function finalizeClear() {
   clearScale.clear();
   clearing = null;
   syncInstances();
+  checkPerfectClear();
   afterMove();
+}
+function checkPerfectClear() {
+  if (!board.every(v => v === 0)) return;
+  const bonus = 2000 * (FEVER() ? 2 : 1);
+  addScore(bonus);
+  popup("PERFECT CLEAR +" + bonus.toLocaleString(), "big");
+  SFX.perfect();
+  addShake(1.2);
+  haptic([30, 40, 70]);
+  unlockAch("perfect");
 }
 function afterMove() {
   updateHUD();
@@ -808,24 +1089,185 @@ const anyFit = () => {
   return false;
 };
 
+// ---------- Power-ups ----------
+function updatePowers() {
+  const countIds = { bomb: "pBomb", hammer: "pHammer", shuffle: "pShuffle" };
+  for (const def of POWER_DEFS) {
+    const n = powers[def.id];
+    $(countIds[def.id]).textContent = n;
+    const btn = document.querySelector('.power[data-power="' + def.id + '"]');
+    if (!btn) continue;
+    btn.classList.toggle("empty", n <= 0);
+    btn.classList.toggle("armed", targeting === def.id);
+    btn.title = def.name + " — " + def.desc + " (" + def.key + ")";
+    btn.setAttribute("aria-label", def.name + ", " + n + " charge" + (n === 1 ? "" : "s") + ". " + def.desc + " Shortcut " + def.key + ".");
+  }
+}
+
+function consumePower(type) {
+  powers[type] = Math.max(0, powers[type] - 1);
+  powerUses++;
+  updatePowers();
+  if (powerUses >= 3) unlockAch("power3");
+  haptic(20);
+}
+
+function cancelTargeting() {
+  targeting = null;
+  hideTarget();
+  targetHint.classList.remove("on");
+  updatePowers();
+}
+
+function usePower(type) {
+  if (mode !== "play" || clearing) return;
+  if (targeting === type) { cancelTargeting(); SFX.button(); return; }
+  if (!powers[type]) { SFX.invalid(); return; }
+  SFX.unlock();
+  if (type === "shuffle") {
+    consumePower("shuffle");
+    shuffleTray();
+    return;
+  }
+  cancelTargeting();
+  targeting = type;
+  targetHint.textContent = type === "bomb"
+    ? "Tap a cell to bomb 3×3 · Esc or tap 💣 again to cancel"
+    : "Tap a block to smash it · Esc or tap 🔨 again to cancel";
+  targetHint.classList.add("on");
+  hideGhost();
+  updatePowers();
+  SFX.button();
+}
+
+function shuffleTray() {
+  let attempts = 0;
+  do {
+    tray = [randomPiece(), randomPiece(), randomPiece()];
+    attempts++;
+  } while (!anyFit() && attempts < 40);
+  refreshSlots(true);
+  SFX.shuffle();
+  popup("🔀 TRAY SHUFFLED", "");
+  haptic(15);
+  if (!anyFit()) gameOver();
+}
+
+function showTargetAt(i, j) {
+  if (!targeting) return;
+  const cells = [];
+  if (targeting === "bomb") {
+    for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) {
+      const x = i + di, y = j + dj;
+      if (inBoard(x, y)) cells.push([x, y]);
+    }
+  } else {
+    cells.push([i, j]);
+  }
+  const hasBlock = cells.some(([x, y]) => board[idxOf(x, y)]);
+  targetMat.color.set(hasBlock ? 0xffd166 : 0xff4d6d);
+  for (let k = 0; k < targetPool.length; k++) {
+    const m = targetPool[k];
+    if (k < cells.length) {
+      const [x, y] = cells[k], p = cellPos(x, y);
+      m.position.set(p.x, 0.06, p.z);
+      m.visible = true;
+    } else m.visible = false;
+  }
+}
+
+function applyBomb(i, j) {
+  if (targeting !== "bomb" || mode !== "play") return;
+  const cells = [];
+  for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) {
+    const x = i + di, y = j + dj;
+    if (inBoard(x, y)) cells.push([x, y]);
+  }
+  if (!cells.some(([x, y]) => board[idxOf(x, y)])) { SFX.invalid(); return; }
+  consumePower("bomb");
+  cancelTargeting();
+  let cleared = 0;
+  for (const [x, y] of cells) {
+    const idx = idxOf(x, y), v = board[idx];
+    if (!v) continue;
+    const p = cellPos(x, y);
+    spawnBurst(p.x, BLOCK_H * 0.7, p.z, PALETTE[v - 1].three, 7, 3.2, 5);
+    board[idx] = 0;
+    cleared++;
+  }
+  addScore(cleared * 15 * (FEVER() ? 2 : 1));
+  syncInstances();
+  SFX.bomb();
+  addShake(0.9);
+  popup("💣 BOMB!", "");
+  resolveAfterPower();
+}
+
+function applyHammer(i, j) {
+  if (targeting !== "hammer" || mode !== "play") return;
+  const idx = idxOf(i, j);
+  if (!board[idx]) { SFX.invalid(); return; }
+  consumePower("hammer");
+  cancelTargeting();
+  const v = board[idx], p = cellPos(i, j);
+  spawnBurst(p.x, BLOCK_H * 0.7, p.z, PALETTE[v - 1].three, 9, 3.4, 5.4);
+  board[idx] = 0;
+  syncInstances();
+  addScore(20 * (FEVER() ? 2 : 1));
+  SFX.hammer();
+  addShake(0.35);
+  popup("🔨 SMASH!", "");
+  resolveAfterPower();
+}
+
+function resolveAfterPower() {
+  const { rows, cols } = findFullLines();
+  if (!clearLines(rows, cols)) {
+    checkPerfectClear();
+    combo = 0;
+    updateHUD();
+    afterMove();
+  }
+}
+
 function gameOver() {
+  if (mode === "over") return;
   mode = "over";
+  cancelTargeting();
   hideGhost();
   const isBest = score > best;
   if (isBest) { best = score; localStorage.setItem(LS.best, String(best)); }
   localStorage.setItem(LS.games, String(+(localStorage.getItem(LS.games) || 0) + 1));
   localStorage.setItem(LS.lines, String(+(localStorage.getItem(LS.lines) || 0) + linesTotal));
+
+  const gained = Math.floor(score / 25) + linesTotal * 4 + maxCombo * 8 + feversTriggered * 30;
+  const oldRank = rankIndexFor(xp);
+  xp += gained;
+  localStorage.setItem(LS.xp, String(xp));
+  const newRank = rankIndexFor(xp);
+
   $("oScore").textContent = score.toLocaleString();
   $("oBest").textContent = best.toLocaleString();
   $("oLines").textContent = linesTotal;
   $("oCombo").textContent = "×" + maxCombo;
+  $("oPowers").textContent = powerUses;
+  updateRankUI();
+  oXpGain.textContent = "+" + gained.toLocaleString() + " XP";
+  updateMenuStats();
   $("newBest").classList.toggle("on", isBest);
   showScreen("overScr");
-  setTrayVisible(false);
+  setBottomUI(false);
   feverUntil = 0;
   feverEl.classList.remove("on");
+  feverGlow.classList.remove("on");
+  updateFeverMeter();
+  if (newRank > oldRank) {
+    toast(RANKS[newRank].icon, "RANK UP", RANKS[newRank].name, "New rank reached — keep climbing.");
+    SFX.rank();
+  }
   SFX.over();
   updateHUD();
+  haptic([20, 40, 60]);
 }
 
 // ---------- HUD / popups / screens ----------
@@ -835,7 +1277,64 @@ function updateHUD() {
   hLines.textContent = linesTotal;
   if (combo >= 2) { comboEl.textContent = "COMBO ×" + combo; comboEl.classList.add("on"); }
   else comboEl.classList.remove("on");
+  updateFeverMeter();
 }
+
+function updateFeverMeter() {
+  const active = mode === "play" && FEVER();
+  const prog = active ? PRISM_EVERY : (linesTotal % PRISM_EVERY);
+  const key = (active ? "1" : "0") + ":" + prog;
+  if (key === lastFeverKey) return;
+  lastFeverKey = key;
+  fmFill.style.width = (prog / PRISM_EVERY * 100) + "%";
+  fmFill.classList.toggle("active", active);
+  fmCount.textContent = active ? "ACTIVE" : prog + "/" + PRISM_EVERY;
+  $("feverMeter").classList.toggle("active", active);
+}
+
+function updateRankUI() {
+  const idx = rankIndexFor(xp), rank = RANKS[idx], next = RANKS[idx + 1];
+  const pct = next ? Math.min(100, ((xp - rank.xp) / (next.xp - rank.xp)) * 100) : 100;
+  const paint = (icon, nameEl, xpEl, fill, nextEl) => {
+    icon.textContent = rank.icon;
+    icon.style.color = rank.color;
+    icon.style.borderColor = rank.color + "66";
+    icon.style.background = rank.color + "18";
+    nameEl.textContent = rank.name;
+    xpEl.textContent = xp.toLocaleString() + " XP";
+    fill.style.width = pct + "%";
+    nextEl.textContent = next ? (next.xp - xp).toLocaleString() + " XP to " + next.name : "Max rank reached";
+  };
+  paint(mRankIcon, mRank, mXp, mXpFill, mRankNext);
+  paint(oRankIcon, oRank, oXpGain, oXpFill, oRankNext);
+}
+
+function updateMenuStats() {
+  const games = +(localStorage.getItem(LS.games) || 0);
+  const lines = +(localStorage.getItem(LS.lines) || 0);
+  mAch.textContent = "🏆 " + unlocked.size + "/" + ACHIEVEMENTS.length + " achievements · 🎮 " + games + " games · 📏 " + lines + " lines";
+}
+
+function toast(icon, kicker, title, desc) {
+  const d = document.createElement("div");
+  d.className = "toast";
+  d.innerHTML = '<div class="t-ic">' + icon + '</div><div><div class="t-kicker">' + kicker + '</div><div class="t-title">' + title + '</div><div class="t-desc">' + desc + '</div></div>';
+  toastsEl.appendChild(d);
+  while (toastsEl.children.length > 4) toastsEl.firstElementChild.remove();
+  setTimeout(() => { d.classList.add("out"); setTimeout(() => d.remove(), 380); }, 3400);
+}
+
+function unlockAch(id) {
+  if (unlocked.has(id)) return;
+  const a = ACHIEVEMENTS.find(x => x.id === id);
+  if (!a) return;
+  unlocked.add(id);
+  localStorage.setItem(LS.ach, JSON.stringify([...unlocked]));
+  toast(a.icon, "ACHIEVEMENT UNLOCKED", a.name, a.desc);
+  SFX.ach();
+  updateMenuStats();
+}
+
 function popup(text, cls) {
   const d = document.createElement("div");
   d.className = "pop" + (cls ? " " + cls : "");
@@ -849,20 +1348,30 @@ function showScreen(id) {
   for (const s of screens) $(s).classList.toggle("on", s === id);
 }
 const hideScreens = () => screens.forEach(s => $(s).classList.remove("on"));
-function setTrayVisible(v) { trayEl.style.display = v ? "flex" : "none"; }
+function setBottomUI(v) {
+  trayEl.style.display = v ? "flex" : "none";
+  powersEl.style.display = v ? "flex" : "none";
+  if (!v) targetHint.classList.remove("on");
+}
 function startGame() {
+  cancelTargeting();
   board.fill(0);
   clearScale.clear();
   clearing = null;
   score = 0; combo = 0; maxCombo = 0; linesTotal = 0; piecesPlaced = 0;
   nextFeverAt = PRISM_EVERY; feverUntil = 0; feverLeft = 0;
+  powers = { bomb: 1, hammer: 1, shuffle: 1 };
+  powerUses = 0; powerRewardIdx = 0; nextPowerAt = 5; feversTriggered = 0;
+  lastFeverKey = "";
   feverEl.classList.remove("on");
+  feverGlow.classList.remove("on");
   hideGhost();
   syncInstances();
   dealTray();
   mode = "play";
   hideScreens();
-  setTrayVisible(true);
+  setBottomUI(true);
+  updatePowers();
   updateHUD();
 }
 
@@ -888,8 +1397,34 @@ function boardCellFromClient(cx, cy, piece) {
   return { oi, oj };
 }
 
+function boardCellAtClient(cx, cy) {
+  const r = glCanvas.getBoundingClientRect();
+  ndc.x = ((cx - r.left) / r.width) * 2 - 1;
+  ndc.y = -((cy - r.top) / r.height) * 2 + 1;
+  raycaster.setFromCamera(ndc, camera);
+  if (!raycaster.ray.intersectPlane(planeY0, hitPoint)) return null;
+  const i = Math.round(hitPoint.x / CELL + N / 2 - 0.5);
+  const j = Math.round(hitPoint.z / CELL + N / 2 - 0.5);
+  return inBoard(i, j) ? { i, j } : null;
+}
+
+glCanvas.addEventListener("pointerdown", e => {
+  if (!targeting || mode !== "play") return;
+  e.preventDefault();
+  const cell = boardCellAtClient(e.clientX, e.clientY);
+  if (!cell) { SFX.invalid(); return; }
+  if (targeting === "bomb") applyBomb(cell.i, cell.j);
+  else applyHammer(cell.i, cell.j);
+});
+glCanvas.addEventListener("pointermove", e => {
+  if (!targeting) return;
+  const cell = boardCellAtClient(e.clientX, e.clientY);
+  if (cell) showTargetAt(cell.i, cell.j);
+  else hideTarget();
+}, { passive: true });
+
 function startDrag(e, slotIdx) {
-  if (mode !== "play" || clearing) return;
+  if (mode !== "play" || clearing || targeting) return;
   const piece = tray[slotIdx];
   if (!piece) return;
   e.preventDefault();
@@ -971,9 +1506,11 @@ function onDragCancel() {
 function togglePause() {
   if (mode === "play") {
     mode = "pause";
+    cancelTargeting();
     feverLeft = Math.max(0, feverUntil - performance.now());
     feverUntil = 0;                 // absolute clock freezes while paused
     feverEl.classList.remove("on");
+    feverGlow.classList.remove("on");
     showScreen("pauseScr");
     SFX.button();
   } else if (mode === "pause") {
@@ -983,18 +1520,40 @@ function togglePause() {
     SFX.button();
   }
 }
+function goMenu() {
+  mode = "menu";
+  cancelTargeting();
+  feverUntil = 0;
+  feverEl.classList.remove("on");
+  feverGlow.classList.remove("on");
+  $("mBest").textContent = best.toLocaleString();
+  updateRankUI();
+  updateMenuStats();
+  showScreen("menu");
+  setBottomUI(false);
+  SFX.button();
+}
 $("pauseBtn").addEventListener("click", togglePause);
 $("resumeBtn").addEventListener("click", togglePause);
-$("quitBtn").addEventListener("click", () => { mode = "menu"; feverUntil = 0; feverEl.classList.remove("on"); $("mBest").textContent = best.toLocaleString(); showScreen("menu"); setTrayVisible(false); SFX.button(); });
+$("quitBtn").addEventListener("click", goMenu);
 $("retryBtn").addEventListener("click", () => { SFX.button(); startGame(); });
-$("menuBtn").addEventListener("click", () => { mode = "menu"; feverUntil = 0; feverEl.classList.remove("on"); $("mBest").textContent = best.toLocaleString(); showScreen("menu"); setTrayVisible(false); SFX.button(); });
+$("menuBtn").addEventListener("click", goMenu);
 $("playBtn").addEventListener("click", () => { SFX.unlock(); SFX.button(); startGame(); });
 $("muteBtn").addEventListener("click", () => { $("muteBtn").textContent = SFX.toggleMute() ? "🔇" : "🔊"; });
 $("muteBtn").textContent = SFX.isMuted() ? "🔇" : "🔊";
+for (const btn of document.querySelectorAll(".power")) {
+  btn.addEventListener("click", () => { SFX.unlock(); usePower(btn.dataset.power); });
+}
 
 window.addEventListener("keydown", e => {
-  if (e.code === "Escape" && !e.repeat) { if (mode === "play" || mode === "pause") togglePause(); }
+  if (e.code === "Escape" && !e.repeat) {
+    if (targeting) { cancelTargeting(); SFX.button(); }
+    else if (mode === "play" || mode === "pause") togglePause();
+  }
   else if (e.code === "KeyM" && !e.repeat) { $("muteBtn").textContent = SFX.toggleMute() ? "🔇" : "🔊"; }
+  else if (!e.repeat && (e.code === "Digit1" || e.code === "Numpad1")) usePower("bomb");
+  else if (!e.repeat && (e.code === "Digit2" || e.code === "Numpad2")) usePower("hammer");
+  else if (!e.repeat && (e.code === "Digit3" || e.code === "Numpad3")) usePower("shuffle");
 });
 window.addEventListener("blur", () => { if (mode === "play") togglePause(); });
 
@@ -1024,11 +1583,14 @@ function frame(now) {
   // fever countdown (only while actively playing)
   if (mode === "play" && feverUntil > now) {
     feverEl.classList.add("on");
+    feverGlow.classList.add("on");
     feverTimeEl.textContent = Math.ceil((feverUntil - now) / 1000);
   } else if (mode === "play" && feverUntil > 0 && feverUntil <= now) {
     feverUntil = 0;
     feverEl.classList.remove("on");
+    feverGlow.classList.remove("on");
   }
+  updateFeverMeter();
 
   // camera: parallax + shake decay
   parX += (parTarget.x - parX) * Math.min(1, dt * 4.5);
@@ -1045,9 +1607,12 @@ function frame(now) {
 
 // ---------- Boot ----------
 $("mBest").textContent = best.toLocaleString();
+updateRankUI();
+updateMenuStats();
+updatePowers();
 buildTray();
 syncInstances();
-setTrayVisible(false);
+setBottomUI(false);
 requestAnimationFrame(frame);
 </script>
 </body>
