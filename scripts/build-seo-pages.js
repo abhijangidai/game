@@ -41,7 +41,7 @@ const PAGES = [
       { q: "Do I need to download Road Fury?", a: "No download or install is required. Open the page, press play and the 3D game starts instantly." },
       { q: "How many stages are in Road Fury?", a: "The campaign contains 100 stages, and you can unlock and drive eight different cars along the way." }
     ],
-    related: ["neon-rush-3d", "dead-zone-3d", "cricket-league-3d"]
+    related: ["neon-rush-3d", "shadow-hunter-elite", "cricket-league-3d"]
   },
   {
     slug: "block-drop-3d",
@@ -115,7 +115,7 @@ const PAGES = [
       { q: "How many stages does Shadow Hunter have?", a: "There are 500 stages in the campaign, with difficulty and map size increasing as you progress." },
       { q: "Can I play Shadow Hunter on mobile?", a: "Yes. Drag anywhere on the screen to move and tap to strike." }
     ],
-    related: ["shadow-hunter-elite", "dead-zone-3d", "neon-rush-3d"]
+    related: ["shadow-hunter-elite", "block-drop-3d", "neon-rush-3d"]
   },
   {
     slug: "shadow-hunter-elite",
@@ -149,7 +149,7 @@ const PAGES = [
       { q: "What makes Elite different from Shadow Hunter?", a: "Elite adds full 3D combat, a follow camera, a minimap, four weapons, smoke bombs, dashes, time slow and boss fights across 500 stages." },
       { q: "Does Shadow Hunter: Elite save progress?", a: "Yes. Unlocked stages and stars are stored locally in your browser." }
     ],
-    related: ["shadow-hunter", "dead-zone-3d", "road-fury"]
+    related: ["shadow-hunter", "block-drop-3d", "road-fury"]
   },
   {
     slug: "neon-rush-3d",
@@ -183,41 +183,7 @@ const PAGES = [
       { q: "How many levels are in Neon Rush 3D?", a: "There are 40 campaign levels, each with a three-star rating, plus an endless mode." },
       { q: "Does Neon Rush 3D work on mobile?", a: "Yes. Swipe in any direction to switch lanes, jump or slide." }
     ],
-    related: ["road-fury", "dead-zone-3d", "shadow-hunter-elite"]
-  },
-  {
-    slug: "dead-zone-3d",
-    name: "Dead Zone 3D",
-    category: "Action",
-    rating: "4.9",
-    plays: "21K",
-    metaTitle: "Dead Zone 3D — Free Zombie Survival Game | Gamealltime",
-    metaDesc: "Play Dead Zone 3D free. Survive 24 zombie zones, five waves each, defeat bosses and upgrade your weapons in this 3D browser survival game.",
-    lead: "Hold the last city against 24 zombie zones. Move, kite the horde, choose upgrades and topple a boss at the end of every zone.",
-    about: [
-      "Dead Zone 3D drops you into a collapsing city where the dead keep coming. Each zone is five waves, and every cleared wave lets you choose one of three upgrades. Weapons fire automatically at the nearest target, so your job is to move, manage the horde and stay alive.",
-      "Boss waves close out each zone and hit much harder. Upgrade choices shape each run: more damage, faster fire, extra armour, piercing shots or lifesteal. Clear the 24-zone campaign, then see how long you last in endless survival."
-    ],
-    howto: [
-      "Move with WASD, the arrow keys or by dragging on screen.",
-      "Your weapon auto-aims and fires — focus on positioning and dodging.",
-      "Collect green health drops and pick one of three upgrades after each wave.",
-      "Survive five waves to reach the zone boss and unlock the next area."
-    ],
-    controls: ["WASD / Arrows — move", "Drag — move on touch", "Esc — pause", "M — mute"],
-    features: [
-      "24-zone campaign with five waves per zone",
-      "Boss encounter at the end of every zone",
-      "Six upgrade paths including damage, fire rate, armour, pierce and lifesteal",
-      "Endless survival mode after the campaign",
-      "Auto-fire combat designed for keyboard and touch"
-    ],
-    faq: [
-      { q: "Is Dead Zone 3D free?", a: "Yes. The campaign and endless mode are free to play in your browser." },
-      { q: "How many zones are in Dead Zone 3D?", a: "There are 24 zones. Each zone contains five waves and ends with a boss fight." },
-      { q: "Do weapons fire automatically?", a: "Yes. Your weapon automatically targets the nearest zombie, so you can concentrate on movement and upgrades." }
-    ],
-    related: ["shadow-hunter-elite", "neon-rush-3d", "road-fury"]
+    related: ["road-fury", "cricket-league-3d", "shadow-hunter-elite"]
   },
   {
     slug: "cricket-league-3d",
@@ -264,7 +230,6 @@ const THUMBS = {
   "shadow-hunter": "shadow-hunter-thumb.svg",
   "shadow-hunter-elite": "shadow-hunter-elite-thumb.svg",
   "neon-rush-3d": "neon-rush-thumb.svg",
-  "dead-zone-3d": "dead-zone-thumb.svg",
   "cricket-league-3d": "cricket-league-thumb.svg"
 };
 

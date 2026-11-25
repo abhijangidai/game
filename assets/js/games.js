@@ -87,23 +87,6 @@ const GAMES = [
     tags: ["3D", "Racing", "Synthwave", "40 Levels"]
   },
   {
-    id: "dead-zone-3d",
-    title: "Dead Zone 3D",
-    category: "Action",
-    badge: "NEW",
-    badgeColor: "#22c55e",
-    rating: 4.9,
-    plays: "21K",
-    thumb: "linear-gradient(135deg,#030806 0%, #0b2017 55%, #2a0a0a 100%)",
-    thumbIcon: "🧟",
-    thumbImage: "assets/img/dead-zone-thumb.svg",
-    url: "games/dead-zone-3d/index.html",
-    featured: true,
-    description: "Hold the last city against 24 zombie zones. Survive five waves per zone, topple Overseer bosses, spend scrap on damage, fire rate, armor and pierce upgrades, then push into endless survival.",
-    controls: "WASD / arrows or drag to move • Weapons auto-fire • Esc pause • M mute",
-    tags: ["3D", "Zombies", "Survival", "Boss Waves"]
-  },
-  {
     id: "cricket-league-3d",
     title: "Cricket League 3D",
     category: "Sports",
