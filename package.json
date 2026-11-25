@@ -10,7 +10,8 @@
   "homepage": "https://abhijangidai.github.io/game/",
   "scripts": {
     "dev": "npx http-server -p 8000",
-    "start": "npx http-server -p 8000"
+    "start": "npx http-server -p 8000",
+    "build:seo": "node scripts/build-seo-pages.js"
   },
   "keywords": ["games", "arcade", "html5", "road-fury"],
   "author": "abhijangidai",

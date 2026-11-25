@@ -24,40 +24,45 @@ function toggleMobile(){
 }
 window.toggleMobile=toggleMobile;
 
+function gameHref(g){
+  return g.page || `play/${g.id}.html`;
+}
+
 function buildHero(){
   const f = GAMES[0];
+  const href = gameHref(f);
   heroCard.innerHTML = `
     <div class="hero-media" style="background:${f.thumb}">
       <span class="hero-badge">${f.badge || "FEATURED"} • ${f.category.toUpperCase()}</span>
       ${f.thumbImage ? `<img src="${f.thumbImage}" alt="${f.title}" class="hero-media-img">` : `<span class="hero-media-icon">${f.thumbIcon}</span>`}
     </div>
     <div class="hero-content">
-      <h1>${f.title}</h1>
+      <h2>${f.title}</h2>
       <p>${f.description}</p>
       <div class="hero-meta">
         <span class="pill">★ ${f.rating} • ${f.plays} plays</span>
         <span class="pill">${f.category}</span>
       </div>
       <div class="hero-ctas">
-        <a class="btn btn-primary" href="play.html?id=${f.id}">▶ Play Now — Free</a>
-        <a class="btn btn-ghost" href="play.html?id=${f.id}">Learn More</a>
+        <a class="btn btn-primary" href="${href}">▶ Play Now — Free</a>
+        <a class="btn btn-ghost" href="${href}">More about ${f.title}</a>
       </div>
     </div>`;
 }
 
 function cardHTML(g){
-  const href = `play.html?id=${g.id}`;
+  const href = gameHref(g);
   return `
   <article class="card">
     <a href="${href}" style="display:block">
       <div class="card-thumb" style="background:${g.thumb}">
         ${g.badge?`<span class="card-badge" style="background:${g.badgeColor||'#ff5a36'}">${g.badge}</span>`:''}
         <span class="card-plays">▶ ${g.plays}</span>
-        ${g.thumbImage ? `<img src="${g.thumbImage}" alt="${g.title}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">` : `<span style="position:relative;z-index:1">${g.thumbIcon}</span>`}
+        ${g.thumbImage ? `<img src="${g.thumbImage}" alt="${g.title} — free online game" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">` : `<span style="position:relative;z-index:1">${g.thumbIcon}</span>`}
       </div>
     </a>
     <div class="card-body">
-      <h3 class="card-title">${g.title}</h3>
+      <h3 class="card-title"><a href="${href}">${g.title}</a></h3>
       <div class="card-cat">${g.category} • ${g.tags ? g.tags.join(" • ") : ""}</div>
       <div class="card-foot">
         <span class="rating">★ ${g.rating.toFixed(1)} <small>(${g.plays})</small></span>
