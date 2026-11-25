@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/abhijangidai/game.git"
   },
-  "homepage": "https://abhijangidai.github.io/game/",
+  "homepage": "https://gamealltime.com/",
   "scripts": {
     "dev": "npx http-server -p 8000",
     "start": "npx http-server -p 8000",

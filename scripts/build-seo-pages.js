@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const SITE = "https://abhijangidai.github.io/game/";
+const SITE = "https://gamealltime.com/";
 
 const PAGES = [
   {
